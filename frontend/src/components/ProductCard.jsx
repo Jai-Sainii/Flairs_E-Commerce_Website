@@ -56,7 +56,7 @@ export default function ProductCard({ product, onAddToCart }) {
           <span className="text-lg font-bold text-purple-600">₹{productPrice}</span>
           
           <button
-            onClick={() => onAddToCart(product)}
+            onClick={(e) => {e.stopPropagation(); onAddToCart(product);}}
             disabled={stockQuantity <= 0}
             className={`px-6 py-2 text-sm font-medium text-white ${
               stockQuantity <= 0

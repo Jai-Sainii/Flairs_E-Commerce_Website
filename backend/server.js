@@ -6,6 +6,7 @@ import cors from "cors"
 import userRouter from "./routes/userRoutes.js"
 import authRoutes from "./routes/authRoutes.js"
 import productRouter from "./routes/productRoutes.js"
+import contactRouter from "./routes/contactRoutes.js"
 
 
 dotenv.config()
@@ -17,6 +18,7 @@ app.use(cors())
 app.use('/api/auth', authRoutes);
 app.use("/users", userRouter)
 app.use("/products", productRouter)
+app.use("/contacts", contactRouter)
 
 const connectDB = async () => {
     const connect = await mongoose.connect("mongodb://localhost:27017/test_01")
