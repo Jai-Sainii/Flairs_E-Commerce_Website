@@ -20,7 +20,7 @@ const About = () => {
   return (
     <>
       <section className="py-16 md:py-24 bg-white text-gray-800">
-        <div className="container mx-auto px-6 lg:px-8">
+        <div className="container mx-auto mt-6 px-6 lg:px-8">
           
           {/* --- Main Title --- */}
           <div className="text-center mb-12 md:mb-16">

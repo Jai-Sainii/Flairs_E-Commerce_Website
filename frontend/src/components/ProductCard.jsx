@@ -21,7 +21,6 @@ export default function ProductCard({ product, onAddToCart }) {
 
   return (
     <div onClick={productView} className="bg-white shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition">
-      {/* Product Image */}
       <div className="h-60 w-full overflow-hidden">
         <img
           src={productImages?.[0] || "/placeholder.png"}
@@ -30,7 +29,7 @@ export default function ProductCard({ product, onAddToCart }) {
         />
       </div>
 
-      {/* Product Details */}
+
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800">{productName}</h3>
         <p className="text-sm text-gray-500 mb-2">{productCategory}</p>
@@ -39,7 +38,6 @@ export default function ProductCard({ product, onAddToCart }) {
           {productDescription}
         </p>
 
-        {/* Sizes */}
         <div className="flex flex-wrap gap-2 mb-3">
           {productSize.map((size, index) => (
             <span
@@ -51,17 +49,16 @@ export default function ProductCard({ product, onAddToCart }) {
           ))}
         </div>
 
-        {/* Price & Add to Cart */}
         <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-purple-600">₹{productPrice}</span>
+          <span className="text-lg font-bold text-black">₹{productPrice}</span>
           
           <button
             onClick={(e) => {e.stopPropagation(); onAddToCart(product);}}
             disabled={stockQuantity <= 0}
-            className={`px-6 py-2 text-sm font-medium text-white ${
+            className={`px-6 py-2 text-sm font-medium text-black border-[1px] border-gray-300${
               stockQuantity <= 0
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-purple-600 cursor-pointer hover:bg-purple-700 transition"
+                : "cursor-pointer hover:bg-pink-500 transition"
             }`}
           >
             {stockQuantity > 0 ? "Add to Cart" : "Out of Stock"}

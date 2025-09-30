@@ -3,3 +3,6 @@
 a.active hr{
     display: block;
 }
+a.active p{
+    color: rgb(240, 57, 176);
+}

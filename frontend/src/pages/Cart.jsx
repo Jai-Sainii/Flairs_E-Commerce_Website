@@ -83,8 +83,8 @@ const Cart = () => {
                 <button onClick={() => increaseQuantity(item._id)} className="px-2 border rounded">
                   +
                 </button>
-                <button onClick={() => removeItem(item._id)} className="text-red-500">
-                  Remove
+                <button onClick={() => removeItem(item._id)} className="text-red-500 cursor-pointer">
+                  <i class="fa-solid fa-trash"></i>
                 </button>
               </div>
             </div>

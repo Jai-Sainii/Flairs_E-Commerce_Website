@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import ProductCard from '../components/ProductCard';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import ProductCard from "../components/ProductCard";
+import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Collection = () => {
-  const [products, setProducts] = useState([]);          
-  const [filteredProducts, setFilteredProducts] = useState([]); 
-  const [selectedCategories, setSelectedCategories] = useState([]); 
-  const [selectedTypes, setSelectedTypes] = useState([]); 
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const location = useLocation();
-     
 
   const fetchData = async () => {
     try {
       let res = await axios.get("http://localhost:5000/products");
       setProducts(res.data.product);
-      setFilteredProducts(res.data.product); 
+      setFilteredProducts(res.data.product);
     } catch (err) {
       console.error("Error fetching products:", err);
     }
@@ -39,9 +39,10 @@ const Collection = () => {
     }
 
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-    alert(`${product.productName} added to cart!`);
+    toast.success(`${product.productName} added to cart!`, {
+      position: "top-right",
+    });
   };
-
 
   const handleCategoryChange = (e) => {
     const { value, checked } = e.target;
@@ -60,13 +61,11 @@ const Collection = () => {
   useEffect(() => {
     let updatedList = [...products];
 
-
     if (selectedCategories.length > 0) {
       updatedList = updatedList.filter((product) =>
         selectedCategories.includes(product.productCategory.toLowerCase())
       );
     }
-
 
     if (selectedTypes.length > 0) {
       updatedList = updatedList.filter((product) =>
@@ -79,7 +78,6 @@ const Collection = () => {
     const params = new URLSearchParams(location.search);
     const query = params.get("search") || "";
     setSearchQuery(query);
-
   }, [selectedCategories, selectedTypes, products, location.search]);
 
   useEffect(() => {
@@ -99,7 +97,6 @@ const Collection = () => {
   return (
     <div className="max-w-screen flex items-center justify-center min-h-screen">
       <div className="w-11/12 min-h-[85vh] flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-top">
-
         <div className="min-w-60">
           <p className="my-2 text-xl flex items-center cursor-pointer gap-2">
             Filters
@@ -142,16 +139,17 @@ const Collection = () => {
           </div>
         </div>
 
-
         <div className="flex-1">
           <div className="w-full flex flex-col">
-            <div className='h-[5rem] flex flex-row items-center gap-2'>
-              <hr className='w-[60px] border-none h-[1.5px] bg-gray-700' />
-              <h1 className='text-3xl'>All the Products</h1>
+            <div className="h-[5rem] flex flex-row items-center gap-2">
+              <hr className="w-[60px] border-none h-[1.5px] bg-gray-700" />
+              <h1 className="text-3xl">All the Products</h1>
             </div>
 
             {filteredProducts.length === 0 ? (
-              <p className="text-gray-500 text-center py-10">No products found.</p>
+              <p className="text-gray-500 text-center py-10">
+                No products found.
+              </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredProducts.map((product, index) => (
