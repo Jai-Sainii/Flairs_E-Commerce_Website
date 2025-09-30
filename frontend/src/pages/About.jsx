@@ -22,7 +22,6 @@ const About = () => {
       <section className="py-16 md:py-24 bg-white text-gray-800">
         <div className="container mx-auto mt-6 px-6 lg:px-8">
           
-          {/* --- Main Title --- */}
           <div className="text-center mb-12 md:mb-16">
             <div className="flex items-center justify-center">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
@@ -32,11 +31,8 @@ const About = () => {
             </div>
           </div>
 
-          {/* --- Content Grid: Image and Text --- */}
-          {/* Flex container: stacks vertically on mobile, horizontally on medium screens and up */}
           <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16">
             
-            {/* Image Container */}
             <div className="md:w-1/2">
             
               <img 
@@ -46,7 +42,6 @@ const About = () => {
               />
             </div>
 
-            {/* Text Container */}
             <div className="md:w-1/2">
               <p className="text-gray-600 text-base md:text-[16px] leading-relaxed mb-6">
                 <strong className="font-semibold text-gray-900">Flaire</strong> was born out of a passion for innovation and a desire to revolutionize the way people shop online. Our journey began with a simple idea: to provide a platform where customers can easily discover, explore, and purchase a wide range of products from the comfort of their homes.
@@ -70,18 +65,15 @@ const About = () => {
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-6 lg:px-8">
 
-          {/* --- Main Title --- */}
           <div className="text-center mb-12 md:mb-16">
             <div className="flex items-center justify-center">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 uppercase">
                 Why Choose Us
               </h2>
-              {/* Decorative line, hidden on small screens */}
               <span className="hidden sm:block w-16 h-0.5 bg-gray-700 ml-4"></span>
             </div>
           </div>
 
-          {/* --- Features Grid --- */}
           <div className="grid grid-cols-1 md:grid-cols-3 md:divide-x md:divide-gray-200 text-center">
             {features.map((feature, index) => (
               <div key={index} className="px-8 py-6 md:py-0">

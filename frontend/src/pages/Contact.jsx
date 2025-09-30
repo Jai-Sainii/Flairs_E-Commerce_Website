@@ -24,7 +24,6 @@ const Contact = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-10">
       <div className="w-11/12 lg:w-4/5 flex flex-col lg:flex-row bg-white shadow-lg overflow-hidden">
-        {/* ======== LEFT: CONTACT FORM ======== */}
         <div className="lg:w-1/2 p-10">
           <div className='h-[5rem] flex flex-row items-center gap-2'>
             <h1 className='text-3xl font-semibold'>Contact Us</h1>
@@ -76,7 +75,6 @@ const Contact = () => {
           </form>
         </div>
 
-        {/* ======== RIGHT: CONTACT INFO ======== */}
         <div className="lg:w-1/2 bg-pink-50 p-10 flex flex-col justify-center gap-6">
           <h3 className="text-2xl font-semibold mb-4">Get in Touch</h3>
           <div>

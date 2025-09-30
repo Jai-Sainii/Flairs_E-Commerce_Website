@@ -17,7 +17,7 @@ const contactInfo = [
 
 const Footer = () => {
   return (
-    <footer className="mt-30 w-full bg-white border-t border-gray-200">
+    <footer className="w-full bg-white border-t border-gray-200">
       <div className="container mx-auto px-6 lg:px-8 py-12">
         
         {/* --- Footer content grid --- */}

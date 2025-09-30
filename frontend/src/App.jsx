@@ -13,6 +13,7 @@ import Footer from "./components/Footer";
 import ProductView from "./pages/ProductView";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/Product/:id" element={<ProductView />} />
             <Route path="/collection" element={<Collection />} />
@@ -41,7 +43,7 @@ function App() {
           closeOnClick
           pauseOnHover
           draggable
-          theme="colored" // light | dark | colored
+          theme="colored" 
         />
       </div>
     </>
