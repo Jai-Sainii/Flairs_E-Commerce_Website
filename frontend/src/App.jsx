@@ -14,6 +14,7 @@ import ProductView from "./pages/ProductView";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Profile from "./pages/Profile";
+import ProtectedRoute from "./router/ProtectedRoute";
 
 function App() {
   return (
@@ -23,8 +24,20 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/cart" element={
+                <ProtectedRoute>
+                  <Cart />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="/Product/:id" element={<ProductView />} />
             <Route path="/collection" element={<Collection />} />
             <Route path="/about" element={<About />} />
@@ -37,13 +50,13 @@ function App() {
         <Footer />
         <ToastContainer
           position="top-right"
-          autoClose={3000} 
+          autoClose={3000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
           pauseOnHover
           draggable
-          theme="colored" 
+          theme="colored"
         />
       </div>
     </>

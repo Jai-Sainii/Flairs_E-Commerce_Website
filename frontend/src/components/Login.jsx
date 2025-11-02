@@ -1,8 +1,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  
   const {
     register,
     handleSubmit,
@@ -12,22 +17,19 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", data);
-      console.log("data submitted", data);
-
-      const token = response.data.token;
-
-      if (token) {
-        localStorage.setItem("token", token);
-        console.log("Token saved to localStorage:", token);
+      const success = await login(data.email, data.password);
+      
+      if (success) {
+        toast.success("Login successful!");
+        navigate("/"); 
       } else {
-        console.error("No token received from backend");
+        toast.error("Invalid email or password");
+        setError("root", { message: "Invalid email or password" });
       }
     } catch (error) {
-      console.error(
-        "Error submitting data:",
-        error.response?.data || error.message
-      );
+      console.error("Login error:", error);
+      toast.error("Login failed. Please try again.");
+      setError("root", { message: "Login failed. Please try again." });
     }
   };
 

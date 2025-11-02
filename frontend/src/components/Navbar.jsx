@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -28,8 +31,19 @@ const Navbar = () => {
   };
 
   const handleProfile = () => {
-    navigate("/profile")
-  }
+    if (user) {
+      navigate("/profile");
+    } else {
+      toast.info("Please login to view your profile");
+      navigate("/login");
+    }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    toast.success("Logged out successfully!");
+    navigate("/");
+  };
 
   return (
     <div className="w-full flex fixed z-100 bg-gray-100 items-center justify-center">
@@ -101,13 +115,21 @@ const Navbar = () => {
           <div className="group relative">
             <div className="py-2 px-4 border border-gray-500 rounded-[20px] cursor-pointer flex items-center gap-2">
               <i className="fa-solid fa-user"></i>
-              <span>Profile</span>
+              <span>{user ? user.name : "Profile"}</span>
             </div>
             <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
               <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded">
-                <p onClick={handleProfile} className="cursor-pointer hover:text-black">My Profile</p>
-                <p className="cursor-pointer hover:text-black">Orders</p>
-                <p className="cursor-pointer hover:text-black">Logout</p>
+                {user ? (
+                  <>
+                    <p onClick={handleProfile} className="cursor-pointer hover:text-black">My Profile</p>
+                    <p className="cursor-pointer hover:text-black">Orders</p>
+                    <p onClick={handleLogout} className="cursor-pointer hover:text-black">Logout</p>
+                  </>
+                ) : (
+                  <>
+                    <p onClick={() => navigate("/signup")} className="cursor-pointer hover:text-black">SignUp/Login</p>
+                  </>
+                )}
               </div>
             </div>
           </div>

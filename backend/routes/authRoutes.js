@@ -1,9 +1,11 @@
 import express from "express"
-import { signup, login } from "../middlewares/authMiddleware.js";
+import { signup, login, logout, me } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.post("/signup", signup)
 router.post("/login", login)
+router.post("/logout", logout)
+router.get("/me", me)
 
 export default router;

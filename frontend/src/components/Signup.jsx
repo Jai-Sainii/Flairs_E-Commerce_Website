@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Signup = () => {
-
+  const { signup, login } = useAuth();
+  const navigate = useNavigate();
   const [check, setCheck] = useState(true)
 
   const {
@@ -20,42 +23,33 @@ const Signup = () => {
 
   const onSubmitSignup = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/signup",
-        data
-      );
-
-      const token = response.data.token;
-
-      if (token) {
-        localStorage.setItem("token", token);
+      const success = await signup(data.name, data.email, data.password);
+      
+      if (success) {
+        toast.success("Account created successfully!");
+        navigate("/"); // Redirect to home page after successful signup
       } else {
-        console.error("No token received from backend");
+        toast.error("Signup failed. Email may already be registered.");
       }
     } catch (error) {
-      console.error(
-        "Error submitting data:",
-        error.response?.data || error.message
-      );
+      console.error("Signup error:", error);
+      toast.error("Signup failed. Please try again.");
     }
   };
 
   const onSubmitLogin = async (Logindata) => {
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", Logindata);
-
-      const token = response.data.token;
-
-      if (token) {
-        localStorage.setItem("token", token);
+      const success = await login(Logindata.email, Logindata.password);
+      
+      if (success) {
+        toast.success("Login successful!");
+        navigate("/"); // Redirect to home page after successful login
       } else {
-        console.error("No token received from backend");
+        toast.error("Invalid email or password");
       }
     } catch (error) {
-      console.error(
-        "Error submitting data:",
-        error.response?.data || error.message
-      );
+      console.error("Login error:", error);
+      toast.error("Login failed. Please try again.");
     }
   };
 
