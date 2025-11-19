@@ -1,71 +1,127 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { toast } from "react-toastify";
+import { FiShoppingCart, FiLoader } from "react-icons/fi";
 
 const ProductView = () => {
-
-    const { id } = useParams()
-
-  const [product, setProduct] = useState({
-    productImages: [],
-    productSize: [],
-    details: [],
-  });
-  const [selectedImage, setSelectedImage] = useState(null);
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState("L");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.get(`http://localhost:5000/products/${id}`);
+      setProduct(res.data.product);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      toast.error("Failed to load product details");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (!product) return;
+    
+    try {
+      setIsAddingToCart(true);
+      await axios.post(
+        "http://localhost:5000/cart/add",
+        {
+          productId: product._id,
+          quantity: 1,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success(`${product.productName} added to cart!`, {
+        position: "top-right",
+      });
+    } catch (err) {
+      console.error("Error adding product to cart:", err);
+      const errorMessage = err.response?.data?.message || "Failed to add product to cart";
+      toast.error(errorMessage, {
+        position: "top-right",
+      });
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      let res = await axios.get(`http://localhost:5000/products/${id}`);
-      setProduct(res.data.product);
-    };
     fetchData();
   }, [id]);
 
-  useEffect(() => {
-    if (product.productImages.length > 0) {
-      setSelectedImage(product.productImages[0]);
-    }
-  }, [product]);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="text-center p-10">
+        <h2 className="text-2xl font-semibold text-gray-700">Product not found</h2>
+        <p className="text-gray-500 mt-2">The product you're looking for doesn't exist or has been removed.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-gray-50 font-sans min-h-screen min-w-screen flex items-center">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-          <div className="flex flex-col-reverse md:flex-row gap-4">
-            <div className="flex md:flex-col gap-3 justify-center md:justify-start">
-              {product.productImages.map((image, index) => (
+    <div className="container mx-auto px-4 py-12 flex items-center justify-center">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row gap-8 mt-16">
+          {/* Product Images */}
+          <div className="md:w-1/2">
+            <div className="bg-gray-50 rounded-lg overflow-hidden mb-4 border border-gray-200">
+              {product.productImages?.length > 0 ? (
                 <img
-                  key={index}
-                  src={image}
-                  alt={`Thumbnail ${index + 1}`}
-                  className={`w-16 h-20 md:w-20 md:h-24 object-cover rounded-md cursor-pointer border-2 ${
-                    selectedImage === image
-                      ? "border-gray-900"
-                      : "border-transparent"
-                  } transition-all duration-200`}
-                  onClick={() => setSelectedImage(image)}
-                  onMouseOver={() => setSelectedImage(image)}
+                  src={product.productImages[selectedImage]}
+                  alt={product.productName}
+                  className="w-full h-96 object-contain p-4"
                 />
-              ))}
+              ) : (
+                <div className="w-full h-96 flex items-center justify-center bg-gray-100">
+                  <span className="text-gray-400">No image available</span>
+                </div>
+              )}
             </div>
-
-            <div className="flex-1">
-              <img
-                src={product.productImages?.[0] || "/placeholder.png"}
-                alt="Main Product"
-                className="w-full h-auto object-cover rounded-lg shadow-md"
-              />
-            </div>
+            {product.productImages?.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {product.productImages.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`w-20 h-20 rounded-md overflow-hidden flex-shrink-0 border-2 ${
+                      selectedImage === index 
+                        ? "border-blue-500" 
+                        : "border-transparent hover:border-gray-300"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${product.productName} ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="flex flex-col gap-4">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-              {product.productName}
-            </h1>
-
-            <p className="text-3xl font-extrabold text-gray-900 mt-2">
-              ₹{product.productPrice}
+          {/* Product Info */}
+          <div className="md:w-1/2">
+            <h1 className="text-3xl font-bold mb-2 text-gray-900">{product.productName}</h1>
+            <p className="text-2xl font-semibold text-gray-800 mb-4">
+              ₹{product.productPrice?.toFixed(2)}
             </p>
 
             <p className="text-gray-600 mt-2 leading-relaxed">
@@ -93,7 +149,7 @@ const ProductView = () => {
               </div>
             </div>
 
-            <button className="mt-6 w-full bg-gray-900 text-white font-semibold py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300 shadow-md">
+            <button onClick={handleAddToCart} className="mt-6 w-full bg-gray-900 text-white font-semibold py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300 shadow-md">
               ADD TO CART
             </button>
 

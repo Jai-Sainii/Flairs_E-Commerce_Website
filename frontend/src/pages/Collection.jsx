@@ -23,25 +23,24 @@ const Collection = () => {
     }
   };
 
-  const handleAddToCart = (product) => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingItem = savedCart.find((item) => item._id === product._id);
-
-    let updatedCart;
-    if (existingItem) {
-      updatedCart = savedCart.map((item) =>
-        item._id === product._id
-          ? { ...item, quantity: (item.quantity || 1) + 1 }
-          : item
-      );
-    } else {
-      updatedCart = [...savedCart, { ...product, quantity: 1 }];
+  const handleAddToCart = async (product) => {
+    try{
+      const res = await axios.post("http://localhost:5000/cart/add", {
+        productId: product._id,
+        quantity: 1,
+      }, {
+        withCredentials: true,
+      });
+      toast.success("Product added to cart!", {
+        position: "top-right",
+      });
     }
-
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    toast.success(`${product.productName} added to cart!`, {
-      position: "top-right",
-    });
+    catch(err){
+      console.error("Error adding product to cart:", err);
+      toast.error("Failed to add product to cart", {
+        position: "top-right",
+      });
+    }
   };
 
   const handleCategoryChange = (e) => {

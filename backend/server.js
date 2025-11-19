@@ -8,6 +8,7 @@ import userRouter from "./routes/userRoutes.js"
 import authRoutes from "./routes/authRoutes.js"
 import productRouter from "./routes/productRoutes.js"
 import contactRouter from "./routes/contactRoutes.js"
+import cartRoutes from "./routes/cartRoutes.js"
 
 
 dotenv.config()
@@ -24,7 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use("/users", userRouter)
 app.use("/products", productRouter)
 app.use("/contacts", contactRouter)
-
+app.use("/cart", cartRoutes)
 
 const connectDB = async () => {
     const connect = await mongoose.connect(process.env.MONGO_URI)

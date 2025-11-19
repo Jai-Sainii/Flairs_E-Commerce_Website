@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ProductCard from '../components/ProductCard';
 import axios from 'axios';
 import Hero from '../components/Hero';
+import { toast } from 'react-toastify';
 
 const Home = () => {
 
@@ -12,8 +13,24 @@ const Home = () => {
     setProducts(res.data.product)
   }
 
-  const handleAddToCart = (product) => {
-    alert(`Added ${product.productName} to cart!`);
+  const handleAddToCart = async (product) => {
+    try{
+      const res = await axios.post("http://localhost:5000/cart/add", {
+        productId: product._id,
+        quantity: 1,
+      }, {
+        withCredentials: true,
+      });
+      toast.success("Product added to cart!", {
+        position: "top-right",
+      });
+    }
+    catch(err){
+      console.error("Error adding product to cart:", err);
+      toast.error("Failed to add product to cart", {
+        position: "top-right",
+      });
+    }
   };
 
   useEffect(() => {

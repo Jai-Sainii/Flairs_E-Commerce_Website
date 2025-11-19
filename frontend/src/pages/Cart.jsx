@@ -1,48 +1,66 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
 
-  const loadCart = () => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(savedCart);
+  const loadCart = async () => {
+    const res = await axios.get("http://localhost:5000/cart", {
+      withCredentials: true,
+    });
+    // console.log(res.data);
+    setCart(res.data);
   };
 
-  const saveCart = (updatedCart) => {
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCart(updatedCart);
+  const increaseQuantity = async (id) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/cart/update/${id}`,
+        { action: "increase" },
+        { withCredentials: true } 
+      );
+      setCart(res.data); 
+      loadCart();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to increase quantity");
+    }
   };
 
-  const increaseQuantity = (id) => {
-    const updated = cart.map((item) =>
-      item._id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    saveCart(updated);
+  const decreaseQuantity = async (id) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/cart/update/${id}`,
+        { action: "decrease" },
+        { withCredentials: true }
+      );
+      setCart(res.data);
+      loadCart();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to decrease quantity");
+    }
   };
 
-  const decreaseQuantity = (id) => {
-    const updated = cart
-      .map((item) =>
-        item._id === id ? { ...item, quantity: Math.max(item.quantity - 1, 1) } : item
-      )
-      .filter((item) => item.quantity > 0);
-    saveCart(updated);
-  };
-
-  const removeItem = (id) => {
-    const updated = cart.filter((item) => item._id !== id);
-    saveCart(updated);
-  };
-
-  const getTotalPrice = () => {
-    return cart.reduce((sum, item) => sum + item.productPrice * item.quantity, 0);
+  const removeItem = async (id) => {
+    try {
+      const res = await axios.delete(`http://localhost:5000/cart/remove/${id}`, {
+        withCredentials: true,
+      });
+      setCart(res.data);
+      loadCart();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to remove item");
+    }
   };
 
   const placeOrder = () => {
     alert("Order placed successfully!");
     console.log(cart);
-    localStorage.removeItem("cart");
     setCart([]);
+    loadCart();
   };
 
   useEffect(() => {
@@ -57,41 +75,40 @@ const Cart = () => {
         <p>Your cart is empty.</p>
       ) : (
         <>
-          {cart.map((item) => (
+          {cart.items.map((item) => (
             <div
-              key={item._id}
+              key={item.product._id}
               className="flex items-center justify-between bg-white p-4 mb-4 shadow"
             >
               <div className="flex items-center gap-4">
                 <img
-                  src={item.productImages?.[0] || "/placeholder.png"}
-                  alt={item.productName}
+                  src={item.product.productImages?.[0] || "/placeholder.png"}
+                  alt={item.product.productName}
                   className="w-16 h-16 object-cover rounded"
                 />
                 <div>
-                  <h3 className="font-semibold">{item.productName}</h3>
-                  <p>₹{item.productPrice}</p>
-                  <p className="text-gray-500 text-sm">{item.productDescription}</p>
+                  <h3 className="font-semibold">{item.product.productName}</h3>
+                  <p>₹{item.product.productPrice}</p>
+                  <p className="text-gray-500 text-sm">{item.product.productDescription}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                <button onClick={() => decreaseQuantity(item._id)} className="px-2 border rounded">
+                <button onClick={() => decreaseQuantity(item.product._id)} className="px-2 border rounded">
                   -
                 </button>
                 <span>{item.quantity}</span>
-                <button onClick={() => increaseQuantity(item._id)} className="px-2 border rounded">
+                <button onClick={() => increaseQuantity(item.product._id)} className="px-2 border rounded">
                   +
                 </button>
-                <button onClick={() => removeItem(item._id)} className="text-red-500 cursor-pointer">
+                <button onClick={() => removeItem(item.product._id)} className="text-red-500 cursor-pointer">
                   <i className="fa-solid fa-trash"></i>
                 </button>
               </div>
             </div>
           ))}
-
           <div className="mt-6 flex justify-between items-center">
-            <h3 className="text-xl font-semibold">Total: ₹{getTotalPrice()}</h3>
+            <h3 className="text-xl font-semibold">Total: ₹{cart.totalPrice}</h3>
             <button
               onClick={placeOrder}
               className="text-black px-6 py-2 border-[1px] border-gray-500 cursor-pointer"
@@ -99,6 +116,7 @@ const Cart = () => {
               Place Order
             </button>
           </div>
+
         </>
       )}
     </div>
