@@ -15,6 +15,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./router/ProtectedRoute";
+import CheckoutPage from "./pages/CheckoutPage";
+import OrderDetailsPage from "./pages/OrderDetailsPage";
+import OrdersPage from "./pages/OrdersPage";
 
 function App() {
   return (
@@ -32,11 +35,13 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/cart" element={
+            <Route
+              path="/cart"
+              element={
                 <ProtectedRoute>
                   <Cart />
                 </ProtectedRoute>
-              } 
+              }
             />
             <Route path="/Product/:id" element={<ProductView />} />
             <Route path="/collection" element={<Collection />} />
@@ -45,6 +50,30 @@ function App() {
             <Route path="/users" element={<Users />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <CheckoutPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/order/:id"
+              element={
+                <ProtectedRoute>
+                  <OrderDetailsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <OrdersPage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </main>
         <Footer />

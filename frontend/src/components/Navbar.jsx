@@ -48,7 +48,6 @@ const Navbar = () => {
   return (
     <div className="w-full flex fixed z-100 bg-gray-100 items-center justify-center">
       <div className="w-11/12 flex items-center justify-between py-5 font-medium">
-
         <div>
           <h2 className="text-2xl font-bold text-gray-800">
             Flaire<span className="text-pink-500">.</span>
@@ -78,7 +77,6 @@ const Navbar = () => {
         </ul>
 
         <div className="flex flex-row gap-4 items-center">
-    
           <div className="relative w-64 flex items-center">
             {showSearch ? (
               <>
@@ -89,9 +87,9 @@ const Navbar = () => {
                   placeholder="Search products..."
                   className="w-full border border-gray-300 rounded-full py-2 pl-10 pr-8 focus:outline-none focus:ring-2 focus:ring-pink-400"
                 />
-        
+
                 <i className="fa-solid fa-magnifying-glass absolute left-3 text-gray-500"></i>
-               
+
                 <button
                   onClick={clearSearch}
                   className="absolute right-3 text-gray-500 hover:text-gray-800 font-bold"
@@ -121,13 +119,33 @@ const Navbar = () => {
               <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded">
                 {user ? (
                   <>
-                    <p onClick={handleProfile} className="cursor-pointer hover:text-black">My Profile</p>
-                    <p className="cursor-pointer hover:text-black">Orders</p>
-                    <p onClick={handleLogout} className="cursor-pointer hover:text-black">Logout</p>
+                    <p
+                      onClick={handleProfile}
+                      className="cursor-pointer hover:text-black"
+                    >
+                      My Profile
+                    </p>
+                    <p
+                      onClick={() => navigate("/orders")}
+                      className="cursor-pointer hover:text-black"
+                    >
+                      Orders
+                    </p>
+                    <p
+                      onClick={handleLogout}
+                      className="cursor-pointer hover:text-black"
+                    >
+                      Logout
+                    </p>
                   </>
                 ) : (
                   <>
-                    <p onClick={() => navigate("/signup")} className="cursor-pointer hover:text-black">SignUp/Login</p>
+                    <p
+                      onClick={() => navigate("/signup")}
+                      className="cursor-pointer hover:text-black"
+                    >
+                      SignUp/Login
+                    </p>
                   </>
                 )}
               </div>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
+  const navigate = useNavigate()
 
   const loadCart = async () => {
     const res = await axios.get("http://localhost:5000/cart", {
@@ -57,7 +59,7 @@ const Cart = () => {
   };
 
   const placeOrder = () => {
-    alert("Order placed successfully!");
+    navigate("/checkout");
     console.log(cart);
     setCart([]);
     loadCart();
