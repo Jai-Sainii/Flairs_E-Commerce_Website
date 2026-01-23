@@ -1,7 +1,6 @@
-// src/components/Footer.js
 import React from 'react';
 
-// Data for the navigation links to keep the JSX clean
+
 const companyLinks = [
   { name: 'Home', href: '/' },
   { name: 'About us', href: '/about' },
@@ -20,10 +19,8 @@ const Footer = () => {
     <footer className="w-full bg-white border-t border-gray-200">
       <div className="container mx-auto px-6 lg:px-8 py-12">
         
-        {/* --- Footer content grid --- */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
-          {/* Column 1: Brand and description */}
           <div className="md:col-span-2">
             <h2 className="text-2xl font-bold text-gray-800">
               Flaire<span className="text-pink-500">.</span>
@@ -33,7 +30,6 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Column 2: Company Links */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-800">
               Company
@@ -49,7 +45,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 3: Get in Touch */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-800">
               Get In Touch
@@ -67,7 +62,6 @@ const Footer = () => {
 
         </div>
 
-        {/* --- Bottom section --- */}
         <div className="mt-12 border-t border-gray-200 pt-8 text-center">
           <p className="text-sm text-gray-500">
             Copyright 2025@ Developer Jai - All Right Reserved.

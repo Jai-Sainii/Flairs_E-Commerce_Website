@@ -27,7 +27,7 @@ const Home = () => {
     }
     catch(err){
       console.error("Error adding product to cart:", err);
-      toast.error("Failed to add product to cart", {
+      toast.error("Failed to add product to cart / Login Required", {
         position: "top-right",
       });
     }

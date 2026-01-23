@@ -14,7 +14,6 @@ const productSchema = new mongoose.Schema(
       required: [true, "Product category is required"],
     },
 
-    // New field for type
     productType: {
       type: String,
       enum: ["topwear", "bottomwear", "winterwear"],

@@ -17,7 +17,6 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ message: "No order items" });
     }
 
-    // Verify all products exist and are in stock
     for (const item of orderItems) {
       const product = await Product.findById(item.product);
       if (!product) {
