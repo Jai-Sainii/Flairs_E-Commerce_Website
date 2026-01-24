@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -10,7 +11,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/users/profile", {
+        const res = await axios.get(`${API_BASE_URL}/users/profile`, {
           withCredentials: true,
         });
         console.log(res.data.user);
@@ -23,7 +24,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className='w-full h-full flex items-center justify-center py-40' >
+    <div className="w-full h-full flex items-center justify-center py-40">
       <div className="max-w-sm w-full bg-white rounded-2xl shadow-md border border-gray-100 py-20 flex justify-center items-center gap-4">
         {/* Avatar circle */}
         <div className="flex items-center justify-center h-14 w-14 rounded-full bg-blue-100 text-blue-600 font-semibold text-xl">

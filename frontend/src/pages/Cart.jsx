@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const loadCart = async () => {
-    const res = await axios.get("http://localhost:5000/cart", {
+    const res = await axios.get(`${API_BASE_URL}/cart`, {
       withCredentials: true,
     });
     // console.log(res.data);
@@ -18,11 +19,11 @@ const Cart = () => {
   const increaseQuantity = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/cart/update/${id}`,
+        `${API_BASE_URL}/cart/update/${id}`,
         { action: "increase" },
-        { withCredentials: true } 
+        { withCredentials: true },
       );
-      setCart(res.data); 
+      setCart(res.data);
       loadCart();
     } catch (error) {
       console.error(error);
@@ -33,9 +34,9 @@ const Cart = () => {
   const decreaseQuantity = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/cart/update/${id}`,
+        `${API_BASE_URL}/cart/update/${id}`,
         { action: "decrease" },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setCart(res.data);
       loadCart();
@@ -47,7 +48,7 @@ const Cart = () => {
 
   const removeItem = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/cart/remove/${id}`, {
+      const res = await axios.delete(`${API_BASE_URL}/cart/remove/${id}`, {
         withCredentials: true,
       });
       setCart(res.data);
@@ -90,20 +91,32 @@ const Cart = () => {
                 />
                 <div>
                   <h3 className="font-semibold">{item.product.productName}</h3>
+                  <p>Size: {item.product.productSize}</p>
                   <p>₹{item.product.productPrice}</p>
-                  <p className="text-gray-500 text-sm">{item.product.productDescription}</p>
+                  <p className="text-gray-500 text-sm">
+                    {item.product.productDescription}
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                <button onClick={() => decreaseQuantity(item.product._id)} className="px-2 border rounded">
+                <button
+                  onClick={() => decreaseQuantity(item.product._id)}
+                  className="px-2 border rounded"
+                >
                   -
                 </button>
                 <span>{item.quantity}</span>
-                <button onClick={() => increaseQuantity(item.product._id)} className="px-2 border rounded">
+                <button
+                  onClick={() => increaseQuantity(item.product._id)}
+                  className="px-2 border rounded"
+                >
                   +
                 </button>
-                <button onClick={() => removeItem(item.product._id)} className="text-red-500 cursor-pointer">
+                <button
+                  onClick={() => removeItem(item.product._id)}
+                  className="text-red-500 cursor-pointer"
+                >
                   <i className="fa-solid fa-trash"></i>
                 </button>
               </div>
@@ -118,7 +131,6 @@ const Cart = () => {
               Place Order
             </button>
           </div>
-
         </>
       )}
     </div>

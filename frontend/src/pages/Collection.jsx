@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -15,7 +16,7 @@ const Collection = () => {
 
   const fetchData = async () => {
     try {
-      let res = await axios.get("http://localhost:5000/products");
+      let res = await axios.get(`${API_BASE_URL}/products`);
       setProducts(res.data.product);
       setFilteredProducts(res.data.product);
     } catch (err) {
@@ -24,18 +25,21 @@ const Collection = () => {
   };
 
   const handleAddToCart = async (product) => {
-    try{
-      const res = await axios.post("http://localhost:5000/cart/add", {
-        productId: product._id,
-        quantity: 1,
-      }, {
-        withCredentials: true,
-      });
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/cart/add`,
+        {
+          productId: product._id,
+          quantity: 1,
+        },
+        {
+          withCredentials: true,
+        },
+      );
       toast.success("Product added to cart!", {
         position: "top-right",
       });
-    }
-    catch(err){
+    } catch (err) {
       console.error("Error adding product to cart:", err);
       toast.error("Failed to add product to cart", {
         position: "top-right",
@@ -46,14 +50,14 @@ const Collection = () => {
   const handleCategoryChange = (e) => {
     const { value, checked } = e.target;
     setSelectedCategories((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
+      checked ? [...prev, value] : prev.filter((item) => item !== value),
     );
   };
 
   const handleTypeChange = (e) => {
     const { value, checked } = e.target;
     setSelectedTypes((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
+      checked ? [...prev, value] : prev.filter((item) => item !== value),
     );
   };
 
@@ -62,13 +66,13 @@ const Collection = () => {
 
     if (selectedCategories.length > 0) {
       updatedList = updatedList.filter((product) =>
-        selectedCategories.includes(product.productCategory.toLowerCase())
+        selectedCategories.includes(product.productCategory.toLowerCase()),
       );
     }
 
     if (selectedTypes.length > 0) {
       updatedList = updatedList.filter((product) =>
-        selectedTypes.includes(product.productType.toLowerCase())
+        selectedTypes.includes(product.productType.toLowerCase()),
       );
     }
 
@@ -83,7 +87,7 @@ const Collection = () => {
     let updatedList = [...products];
     if (searchQuery.trim() !== "") {
       updatedList = updatedList.filter((product) =>
-        product.productName.toLowerCase().includes(searchQuery.toLowerCase())
+        product.productName.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
     setFilteredProducts(updatedList);

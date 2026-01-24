@@ -1,20 +1,20 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);   
-  const [loading, setLoading] = useState(true); 
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/auth/me", {
-          withCredentials: true, 
+        const res = await axios.get(`${API_BASE_URL}/api/auth/me`, {
+          withCredentials: true,
         });
         setUser(res.data.user);
       } catch (err) {
@@ -29,9 +29,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${API_BASE_URL}/api/auth/login`,
         { email, password },
-        { withCredentials: true } 
+        { withCredentials: true },
       );
       setUser(res.data.user);
       setLoading(false);
@@ -45,9 +45,9 @@ export const AuthProvider = ({ children }) => {
   const signup = async (name, email, password) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/signup",
+        `${API_BASE_URL}/api/auth/signup`,
         { name, email, password },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setUser(res.data.user);
       setLoading(false);
@@ -61,9 +61,9 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/logout",
+        `${API_BASE_URL}/api/auth/logout`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setUser(null);
     } catch (err) {

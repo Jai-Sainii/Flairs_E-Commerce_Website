@@ -27,7 +27,7 @@ const Signup = () => {
       
       if (success) {
         toast.success("Account created successfully!");
-        navigate("/"); // Redirect to home page after successful signup
+        navigate("/"); 
       } else {
         toast.error("Signup failed. Email may already be registered.");
       }
@@ -43,7 +43,7 @@ const Signup = () => {
       
       if (success) {
         toast.success("Login successful!");
-        navigate("/"); // Redirect to home page after successful login
+        navigate("/");
       } else {
         toast.error("Invalid email or password");
       }

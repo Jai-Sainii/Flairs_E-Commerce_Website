@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -10,7 +11,7 @@ const OrdersPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/orders", {
+        const { data } = await axios.get(`${API_BASE_URL}/orders`, {
           withCredentials: true,
         });
         setOrders(data);
@@ -79,7 +80,7 @@ const OrdersPage = () => {
                 </div>
                 <div
                   className={`mt-2 md:mt-0 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                    order.status
+                    order.status,
                   )}`}
                 >
                   {order.status}

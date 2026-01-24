@@ -1,4 +1,5 @@
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
@@ -15,7 +16,7 @@ const ProductView = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get(`http://localhost:5000/products/${id}`);
+      const res = await axios.get(`${API_BASE_URL}/products/${id}`);
       setProduct(res.data.product);
     } catch (error) {
       console.error("Error fetching product:", error);
@@ -27,25 +28,26 @@ const ProductView = () => {
 
   const handleAddToCart = async () => {
     if (!product) return;
-    
+
     try {
       setIsAddingToCart(true);
       await axios.post(
-        "http://localhost:5000/cart/add",
+        `${API_BASE_URL}/cart/add`,
         {
           productId: product._id,
           quantity: 1,
         },
         {
           withCredentials: true,
-        }
+        },
       );
       toast.success(`${product.productName} added to cart!`, {
         position: "top-right",
       });
     } catch (err) {
       console.error("Error adding product to cart:", err);
-      const errorMessage = err.response?.data?.message || "Failed to add product to cart";
+      const errorMessage =
+        err.response?.data?.message || "Failed to add product to cart";
       toast.error(errorMessage, {
         position: "top-right",
       });
@@ -69,8 +71,12 @@ const ProductView = () => {
   if (!product) {
     return (
       <div className="text-center p-10">
-        <h2 className="text-2xl font-semibold text-gray-700">Product not found</h2>
-        <p className="text-gray-500 mt-2">The product you're looking for doesn't exist or has been removed.</p>
+        <h2 className="text-2xl font-semibold text-gray-700">
+          Product not found
+        </h2>
+        <p className="text-gray-500 mt-2">
+          The product you're looking for doesn't exist or has been removed.
+        </p>
       </div>
     );
   }
@@ -101,8 +107,8 @@ const ProductView = () => {
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     className={`w-20 h-20 rounded-md overflow-hidden flex-shrink-0 border-2 ${
-                      selectedImage === index 
-                        ? "border-blue-500" 
+                      selectedImage === index
+                        ? "border-blue-500"
                         : "border-transparent hover:border-gray-300"
                     }`}
                   >
@@ -119,7 +125,9 @@ const ProductView = () => {
 
           {/* Product Info */}
           <div className="md:w-1/2">
-            <h1 className="text-3xl font-bold mb-2 text-gray-900">{product.productName}</h1>
+            <h1 className="text-3xl font-bold mb-2 text-gray-900">
+              {product.productName}
+            </h1>
             <p className="text-2xl font-semibold text-gray-800 mb-4">
               ₹{product.productPrice?.toFixed(2)}
             </p>
@@ -149,7 +157,10 @@ const ProductView = () => {
               </div>
             </div>
 
-            <button onClick={handleAddToCart} className="mt-6 w-full bg-gray-900 text-white font-semibold py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300 shadow-md">
+            <button
+              onClick={handleAddToCart}
+              className="mt-6 w-full bg-gray-900 text-white font-semibold py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300 shadow-md"
+            >
               ADD TO CART
             </button>
 

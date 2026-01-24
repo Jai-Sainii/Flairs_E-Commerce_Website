@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 import { toast } from "react-toastify";
 
 const CheckoutPage = () => {
@@ -20,7 +21,7 @@ const CheckoutPage = () => {
   // Fetch cart items from backend
   const fetchCartItems = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/cart", {
+      const { data } = await axios.get(`${API_BASE_URL}/cart`, {
         withCredentials: true,
       });
       setCartItems(data.items || []);
@@ -37,7 +38,7 @@ const CheckoutPage = () => {
   const calculatePrice = () => {
     const itemsPrice = cartItems.reduce(
       (acc, item) => acc + item.product.productPrice * item.quantity,
-      0
+      0,
     );
     const shippingPrice = itemsPrice > 100 ? 0 : 10;
     const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
@@ -80,7 +81,7 @@ const CheckoutPage = () => {
       }));
 
       const { data } = await axios.post(
-        "http://localhost:5000/orders",
+        `${API_BASE_URL}/orders`,
         {
           orderItems,
           shippingAddress,
@@ -95,10 +96,10 @@ const CheckoutPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
-      await axios.delete("http://localhost:5000/cart/clear", {
+      await axios.delete(`${API_BASE_URL}/cart/clear`, {
         withCredentials: true,
       });
 

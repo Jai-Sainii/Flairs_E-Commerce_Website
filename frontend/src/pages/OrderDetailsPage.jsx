@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 
 const OrderDetailsPage = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const OrderDetailsPage = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/orders/${id}`, {
+        const { data } = await axios.get(`${API_BASE_URL}/orders/${id}`, {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
@@ -101,8 +102,8 @@ const OrderDetailsPage = () => {
               {order.paymentMethod === "credit_card"
                 ? "Credit Card"
                 : order.paymentMethod === "paypal"
-                ? "PayPal"
-                : "Cash on Delivery"}
+                  ? "PayPal"
+                  : "Cash on Delivery"}
             </p>
             <div
               className={`inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium ${

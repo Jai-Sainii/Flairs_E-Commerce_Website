@@ -1,4 +1,5 @@
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 import React, { useState } from "react";
 
 const Contact = () => {
@@ -16,7 +17,7 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios.post("http://localhost:5000/contacts", formData);
+    const res = await axios.post(`${API_BASE_URL}/contacts`, formData);
     alert("Message sent successfully!");
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
@@ -25,9 +26,9 @@ const Contact = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-10">
       <div className="w-11/12 lg:w-4/5 flex flex-col lg:flex-row bg-white shadow-lg overflow-hidden">
         <div className="lg:w-1/2 p-10">
-          <div className='h-[5rem] flex flex-row items-center gap-2'>
-            <h1 className='text-3xl font-semibold'>Contact Us</h1>
-            <hr className='w-[50px] border-none h-[2px] bg-gray-700' />
+          <div className="h-[5rem] flex flex-row items-center gap-2">
+            <h1 className="text-3xl font-semibold">Contact Us</h1>
+            <hr className="w-[50px] border-none h-[2px] bg-gray-700" />
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
