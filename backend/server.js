@@ -20,6 +20,10 @@ app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true 
 }))
+<<<<<<< HEAD
+=======
+// app.use(cors())
+>>>>>>> 07be44fdf55a8a9b1baa598311e9889b7d1c9479
 
 
 app.use('/api/auth', authRoutes);
