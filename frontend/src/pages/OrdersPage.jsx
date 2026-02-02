@@ -57,7 +57,7 @@ const OrdersPage = () => {
           <p className="text-xl text-gray-600 mb-4">
             You haven't placed any orders yet.
           </p>
-          <Link to="/collection" className="text-blue-600 hover:underline">
+          <Link to="/collection" className="text-pink-600 hover:underline">
             Start Shopping
           </Link>
         </div>

@@ -18,7 +18,7 @@ const CheckoutPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch cart items from backend
+
   const fetchCartItems = async () => {
     try {
       const { data } = await axios.get(`${API_BASE_URL}/cart`, {
@@ -31,8 +31,21 @@ const CheckoutPage = () => {
     }
   };
 
+  const fetchShippingAddress = async () => {
+    try {
+      const { data } = await axios.get(`${API_BASE_URL}/users/profile`, {
+        withCredentials: true,
+      });
+      setShippingAddress(data.user.shippingAddress || {});
+    } catch (error) {
+      toast.error("Failed to load shipping address");
+      console.error("Error fetching shipping address:", error);
+    }
+  };
+
   useEffect(() => {
     fetchCartItems();
+    fetchShippingAddress();
   }, []);
 
   const calculatePrice = () => {
@@ -40,7 +53,7 @@ const CheckoutPage = () => {
       (acc, item) => acc + item.product.productPrice * item.quantity,
       0,
     );
-    const shippingPrice = itemsPrice > 100 ? 0 : 10;
+    const shippingPrice = itemsPrice > 500 ? 0 : 40;
     const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
     const totalPrice = (itemsPrice + shippingPrice + taxPrice).toFixed(2);
 
