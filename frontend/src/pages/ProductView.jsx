@@ -82,7 +82,7 @@ const ProductView = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 flex items-center justify-center">
+    <div className="container mx-auto px-4 pt-32 pb-12 flex items-center justify-center">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row gap-8 mt-16">
           {/* Product Images */}

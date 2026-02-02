@@ -11,6 +11,7 @@ const Collection = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
 
   const location = useLocation();
 
@@ -99,13 +100,24 @@ const Collection = () => {
 
   return (
     <div className="max-w-screen flex items-center justify-center min-h-screen">
-      <div className="w-11/12 min-h-[85vh] flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-top">
+      <div className="w-11/12 min-h-[85vh] flex flex-col sm:flex-row gap-1 sm:gap-10 pt-28 border-top">
         <div className="min-w-60">
-          <p className="my-2 text-xl flex items-center cursor-pointer gap-2">
-            Filters
+          <p
+            onClick={() => setShowFilter(!showFilter)}
+            className="my-2 text-xl flex items-center cursor-pointer gap-2 select-none"
+          >
+            FILTERS
+            <span
+              className={`sm:hidden text-lg transition-transform ${showFilter ? "rotate-90" : ""}`}
+            >
+              &#10095;
+            </span>
           </p>
 
-          <div className="border border-gray-300 pl-5 py-3 mt-6 hidden sm:block">
+          {/* Filter Categories */}
+          <div
+            className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? "" : "hidden"} sm:block`}
+          >
             <p className="mb-3 text-sm font-medium">CATEGORIES</p>
             <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
               {["men", "women", "kids"].map((category) => (
@@ -123,7 +135,10 @@ const Collection = () => {
             </div>
           </div>
 
-          <div className="border border-gray-300 pl-5 py-3 mt-6 hidden sm:block">
+          {/* Filter Types */}
+          <div
+            className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? "" : "hidden"} sm:block`}
+          >
             <p className="mb-3 text-sm font-medium">TYPE</p>
             <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
               {["topwear", "bottomwear", "winterwear"].map((type) => (
