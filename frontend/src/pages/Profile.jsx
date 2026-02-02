@@ -14,7 +14,6 @@ const Profile = () => {
         const res = await axios.get(`${API_BASE_URL}/users/profile`, {
           withCredentials: true,
         });
-        console.log(res.data.user);
         setUser(res.data.user);
       } catch (err) {
         console.error("Error fetching user:", err);

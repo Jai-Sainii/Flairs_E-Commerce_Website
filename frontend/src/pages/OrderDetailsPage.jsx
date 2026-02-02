@@ -20,7 +20,6 @@ const OrderDetailsPage = () => {
           },
         });
         setOrder(data);
-        console.log(data);
         setLoading(false);
       } catch (error) {
         setError(error.response?.data?.message || "Error fetching order");

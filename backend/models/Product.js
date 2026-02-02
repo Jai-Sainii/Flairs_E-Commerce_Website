@@ -10,7 +10,7 @@ const productSchema = new mongoose.Schema(
 
     productCategory: {
       type: String,
-      enum: ["men", "female", "kids"],
+      enum: ["men", "women", "kids"],
       required: [true, "Product category is required"],
     },
 
