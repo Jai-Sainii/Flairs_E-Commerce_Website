@@ -100,7 +100,7 @@ const Collection = () => {
 
   return (
     <div className="max-w-screen flex items-center justify-center min-h-screen">
-      <div className="w-11/12 min-h-[85vh] flex flex-col sm:flex-row gap-1 sm:gap-10 pt-28 border-top">
+      <div className="w-11/12 min-h-screen flex flex-col sm:flex-row gap-1 sm:gap-10 pt-28 border-top">
         <div className="min-w-60">
           <p
             onClick={() => setShowFilter(!showFilter)}

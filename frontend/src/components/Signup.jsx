@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const Signup = () => {
   const { signup, login } = useAuth();
   const navigate = useNavigate();
-  const [check, setCheck] = useState(true)
+  const [check, setCheck] = useState(true);
 
   const {
     register: registerSignup,
@@ -24,10 +24,10 @@ const Signup = () => {
   const onSubmitSignup = async (data) => {
     try {
       const success = await signup(data.name, data.email, data.password);
-      
+
       if (success) {
         toast.success("Account created successfully!");
-        navigate("/"); 
+        navigate("/");
       } else {
         toast.error("Signup failed. Email may already be registered.");
       }
@@ -40,7 +40,7 @@ const Signup = () => {
   const onSubmitLogin = async (Logindata) => {
     try {
       const success = await login(Logindata.email, Logindata.password);
-      
+
       if (success) {
         toast.success("Login successful!");
         navigate("/");
@@ -54,26 +54,29 @@ const Signup = () => {
   };
 
   const handleLogin = () => {
-    setCheck(false)
-  }
+    setCheck(false);
+  };
   const handleSignup = () => {
-    setCheck(true)
-  }
+    setCheck(true);
+  };
 
   return (
     <>
-      {check? 
-        <div className="min-w-screen min-h-[80vh] flex flex-col mx-auto mt-10 bg-white rounded-lg shadow-lg p-6 border border-gray-200 items-center justify-center">
+      {check ? (
+        <div className="w-full max-w-md flex flex-col mx-auto mt-28 mb-14 p-6 items-center justify-center">
           <div className="text-center mb-4 md:mb-8">
             <div className="flex items-center justify-center">
-              <h2 className="text-1xl md:text-3xl font-bold tracking-tight text-gray-900">
+              <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">
                 SignUp
               </h2>
-              <span className="hidden sm:block w-12 h-0.5 bg-gray-700 ml-4"></span>
+              <span className="block w-12 h-0.5 bg-gray-700 ml-4"></span>
             </div>
           </div>
 
-          <form className="w-1/3 space-y-4" onSubmit={handleSubmitSignup(onSubmitSignup)}>
+          <form
+            className="w-full space-y-4"
+            onSubmit={handleSubmitSignup(onSubmitSignup)}
+          >
             <div>
               <input
                 placeholder="Name"
@@ -83,7 +86,7 @@ const Signup = () => {
                   required: { value: true, message: "This field is required" },
                   minLength: { value: 4, message: "Min length is 4" },
                 })}
-                />
+              />
               {signupErrors.name && (
                 <div className="text-red-500 text-sm mt-1">
                   {signupErrors.name.message}
@@ -100,7 +103,7 @@ const Signup = () => {
                   required: { value: true, message: "This field is required" },
                   minLength: { value: 4, message: "Min length is 4" },
                 })}
-                />
+              />
               {signupErrors.email && (
                 <div className="text-red-500 text-sm mt-1">
                   {signupErrors.email.message}
@@ -114,9 +117,12 @@ const Signup = () => {
                 type="password"
                 className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-pink-400"
                 {...registerSignup("password", {
-                  minLength: { value: 8, message: "Min length of password is 8" },
+                  minLength: {
+                    value: 8,
+                    message: "Min length of password is 8",
+                  },
                 })}
-                />
+              />
               {signupErrors.password && (
                 <div className="text-red-500 text-sm mt-1">
                   {signupErrors.password.message}
@@ -126,31 +132,37 @@ const Signup = () => {
 
             <div className="flex flex-row items-center justify-between">
               <span className="text-sm cursor-pointer"></span>
-              <span onClick={handleLogin} className="text-sm cursor-pointer font-medium">Login ?</span>
+              <span
+                onClick={handleLogin}
+                className="text-sm cursor-pointer font-medium"
+              >
+                Login ?
+              </span>
             </div>
 
             <button
               type="submit"
               disabled={isSignupSubmitting}
               className="w-full py-2 bg-pink-500 text-white font-medium hover:bg-pink-600 disabled:bg-pink-300 transition"
-              >
+            >
               {isSignupSubmitting ? "Submitting..." : "Submit"}
             </button>
-
           </form>
         </div>
-      : 
-        <div className="min-w-screen min-h-[80vh] flex flex-col items-center justify-center mx-auto mt-10 bg-white rounded-lg shadow-lg p-6 border border-gray-200">
-          <form className="w-1/3 space-y-4" onSubmit={handleSubmitLogin(onSubmitLogin)}>
-
+      ) : (
+        <div className="w-full max-w-md flex flex-col items-center justify-center mx-auto mt-28 mb-14 p-6">
+          <form
+            className="w-full space-y-4"
+            onSubmit={handleSubmitLogin(onSubmitLogin)}
+          >
             <div className="text-center mb-4 md:mb-8">
               <div className="flex items-center justify-center">
-                <h2 className="text-1xl md:text-3xl font-bold tracking-tight text-gray-900">
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">
                   Login
                 </h2>
-                <span className="hidden sm:block w-12 h-0.5 bg-gray-700 ml-4"></span>
+                <span className="block w-12 h-0.5 bg-gray-700 ml-4"></span>
               </div>
-            </div>  
+            </div>
 
             <div>
               <input
@@ -175,7 +187,10 @@ const Signup = () => {
                 type="password"
                 className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-pink-400"
                 {...registerLogin("password", {
-                  minLength: { value: 8, message: "Min length of password is 8" },
+                  minLength: {
+                    value: 8,
+                    message: "Min length of password is 8",
+                  },
                 })}
               />
               {loginErrors.password && (
@@ -186,8 +201,15 @@ const Signup = () => {
             </div>
 
             <div className="flex flex-row items-center justify-between">
-              <span className="text-sm cursor-pointer font-medium">Forgot Password ?</span>
-              <span onClick={handleSignup} className="text-sm cursor-pointer font-medium">Create account</span>
+              <span className="text-sm cursor-pointer font-medium">
+                Forgot Password ?
+              </span>
+              <span
+                onClick={handleSignup}
+                className="text-sm cursor-pointer font-medium"
+              >
+                Create account
+              </span>
             </div>
 
             <button
@@ -199,7 +221,7 @@ const Signup = () => {
             </button>
           </form>
         </div>
-      }
+      )}
     </>
   );
 };
