@@ -78,12 +78,13 @@ const OrdersPage = () => {
                     Date: {new Date(order.createdAt).toLocaleDateString()}
                   </p>
                 </div>
+                
                 <div
                   className={`mt-2 md:mt-0 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
                     order.status,
                   )}`}
                 >
-                  {order.status}
+                  Status: {order.status}
                 </div>
               </div>
 
