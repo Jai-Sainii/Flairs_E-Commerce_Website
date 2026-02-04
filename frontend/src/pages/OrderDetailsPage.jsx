@@ -98,8 +98,8 @@ const OrderDetailsPage = () => {
 
             <h2 className="text-xl font-semibold mt-6 mb-4">Payment Method</h2>
             <p className="capitalize">
-              {order.paymentMethod === "credit_card"
-                ? "Credit Card"
+              {order.paymentMethod === "razorpay"
+                ? "Razorpay"
                 : order.paymentMethod === "paypal"
                   ? "PayPal"
                   : "Cash on Delivery"}

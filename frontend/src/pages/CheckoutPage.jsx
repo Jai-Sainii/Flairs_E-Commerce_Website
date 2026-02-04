@@ -6,6 +6,10 @@ import { toast } from "react-toastify";
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+  });
   const [shippingAddress, setShippingAddress] = useState({
     fullName: "",
     address: "",
@@ -14,10 +18,9 @@ const CheckoutPage = () => {
     country: "",
     phone: "",
   });
-  const [paymentMethod, setPaymentMethod] = useState("credit_card");
+  const [paymentMethod, setPaymentMethod] = useState("razorpay");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
 
   const fetchCartItems = async () => {
     try {
@@ -36,6 +39,7 @@ const CheckoutPage = () => {
       const { data } = await axios.get(`${API_BASE_URL}/users/profile`, {
         withCredentials: true,
       });
+      setUser({name: data.user.name, email: data.user.email});
       setShippingAddress(data.user.shippingAddress || {});
     } catch (error) {
       toast.error("Failed to load shipping address");
@@ -43,9 +47,24 @@ const CheckoutPage = () => {
     }
   };
 
+  const loadScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
   useEffect(() => {
     fetchCartItems();
     fetchShippingAddress();
+    loadScript("https://checkout.razorpay.com/v1/checkout.js");
   }, []);
 
   const calculatePrice = () => {
@@ -70,6 +89,8 @@ const CheckoutPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (loading) return;
+
     if (
       !shippingAddress.fullName ||
       !shippingAddress.address ||
@@ -82,9 +103,9 @@ const CheckoutPage = () => {
       return;
     }
 
-    try {
-      setLoading(true);
+    setLoading(true);
 
+    try {
       const orderItems = cartItems.map((item) => ({
         product: item.product._id,
         name: item.product.productName,
@@ -106,24 +127,90 @@ const CheckoutPage = () => {
         },
         {
           withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         },
       );
 
-      await axios.delete(`${API_BASE_URL}/cart/clear`, {
-        withCredentials: true,
-      });
+      if (paymentMethod === "razorpay") {
+        const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
 
-      navigate(`/orders`);
-      toast.success("Order placed successfully!");
+        const paymentObject = new window.Razorpay({
+          key: razorpayKey,
+          amount: data.amount,
+          currency: "INR",
+          name: "Order Payment",
+          description: `Payment by ${user.name} | email: ${user.email}`,
+          order_id: data.razorpayOrderId,
+
+          handler: async (response) => {
+            try {
+              
+              await axios.post(
+                `${API_BASE_URL}/orders/verifyPayment`,
+                {
+                  orderItems,
+                  shippingAddress,
+                  paymentMethod,
+                  itemsPrice: Number(itemsPrice),
+                  shippingPrice: Number(shippingPrice),
+                  taxPrice: Number(taxPrice),
+                  totalPrice: Number(totalPrice),
+                  razorpay_order_id: data.razorpayOrderId,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                },
+                {
+                  withCredentials: true,
+                  headers: { "Content-Type": "application/json" },
+                },
+              );
+
+              await axios.delete(`${API_BASE_URL}/cart/clear`, {
+                withCredentials: true,
+              });
+
+              toast.success("Payment successful. Order placed!");
+              navigate("/orders");
+            } catch (err) {
+              const msg =
+                err.response?.data?.message || "Payment verification failed";
+              toast.error(msg);
+            } finally {
+              setLoading(false);
+            }
+          },
+
+          modal: {
+            ondismiss: () => {
+              toast.error("Payment cancelled");
+              setLoading(false);
+            },
+          },
+        });
+
+        paymentObject.open();
+        return; 
+      }
+
+      if (paymentMethod === "cash_on_delivery" || paymentMethod === "paypal") {
+        await axios.delete(`${API_BASE_URL}/cart/clear`, {
+          withCredentials: true,
+        });
+
+        toast.success("Order placed successfully!");
+        navigate("/orders");
+        return;
+      }
+
+      toast.error("Invalid payment method");
     } catch (error) {
       const message =
         error.response?.data?.message || error.message || "Error placing order";
       toast.error(message);
     } finally {
-      setLoading(false);
+      if (paymentMethod !== "razorpay") {
+        setLoading(false);
+      }
     }
   };
 
@@ -265,15 +352,15 @@ const CheckoutPage = () => {
                   <div className="flex items-center">
                     <input
                       type="radio"
-                      id="credit_card"
+                      id="razorpay"
                       name="paymentMethod"
-                      value="credit_card"
-                      checked={paymentMethod === "credit_card"}
+                      value="razorpay"
+                      checked={paymentMethod === "razorpay"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       className="h-4 w-4 text-blue-600"
                     />
-                    <label htmlFor="credit_card" className="ml-2">
-                      Credit Card
+                    <label htmlFor="razorpay" className="ml-2">
+                      Razorpay
                     </label>
                   </div>
                   <div className="flex items-center">
