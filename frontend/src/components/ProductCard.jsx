@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 
-export default function ProductCard({ product, onAddToCart }) {
+export default function ProductCard({ product }) {
 
   const navigate = useNavigate()
 
@@ -52,17 +52,16 @@ export default function ProductCard({ product, onAddToCart }) {
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold text-black">₹{productPrice}</span>
           
-          <button
-            onClick={(e) => {e.stopPropagation(); onAddToCart(product);}}
+          <p
             disabled={stockQuantity <= 0}
-            className={`px-6 py-2 text-sm font-medium text-black border-[1px] border-gray-300${
+            className={`px-6 py-2 text-sm font-medium text-black${
               stockQuantity <= 0
-                ? "bg-gray-400 cursor-not-allowed"
-                : "cursor-pointer hover:bg-pink-500 transition"
+                ? "text-gray-400"
+                : "text-black"
             }`}
           >
-            {stockQuantity > 0 ? "Add to Cart" : "Out of Stock"}
-          </button>
+            {stockQuantity > 0 ? "A" : "Out of Stock"}
+          </p>
         </div>
       </div>
     </div>

@@ -13,29 +13,6 @@ const Home = () => {
     setProducts(res.data.product);
   };
 
-  const handleAddToCart = async (product) => {
-    try {
-      const res = await axios.post(
-        `${API_BASE_URL}/cart/add`,
-        {
-          productId: product._id,
-          quantity: 1,
-        },
-        {
-          withCredentials: true,
-        },
-      );
-      toast.success("Product added to cart!", {
-        position: "top-right",
-      });
-    } catch (err) {
-      console.error("Error adding product to cart:", err);
-      toast.error("Failed to add product to cart / Login Required", {
-        position: "top-right",
-      });
-    }
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -55,7 +32,6 @@ const Home = () => {
               <ProductCard
                 key={index}
                 product={product}
-                onAddToCart={handleAddToCart}
               />
             ))}
           </div>

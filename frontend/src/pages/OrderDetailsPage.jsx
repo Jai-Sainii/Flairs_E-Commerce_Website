@@ -127,6 +127,9 @@ const OrderDetailsPage = () => {
                         {item.product?.productName || "Product"}
                       </h3>
                       <p className="text-sm text-gray-500 mt-1">
+                        Size: {item.selectedSize}
+                      </p>
+                      <p className="text-sm text-gray-500 mt-1">
                         Quantity: {item.quantity}
                       </p>
                     </div>

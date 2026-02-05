@@ -109,6 +109,7 @@ const CheckoutPage = () => {
       const orderItems = cartItems.map((item) => ({
         product: item.product._id,
         name: item.product.productName,
+        selectedSize: item.selectedSize,
         quantity: item.quantity,
         price: item.product.productPrice,
         image: item.product.productImages[0],

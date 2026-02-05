@@ -61,7 +61,7 @@ const Cart = () => {
 
   const placeOrder = () => {
     navigate("/checkout");
-    console.log(cart);
+    // console.log(cart);
     setCart([]);
     loadCart();
   };
@@ -91,7 +91,7 @@ const Cart = () => {
                 />
                 <div>
                   <h3 className="font-semibold">{item.product.productName}</h3>
-                  <p>Size: {item.product.productSize}</p>
+                  <p>Size: {item.selectedSize}</p>
                   <p>₹{item.product.productPrice}</p>
                   <p className="text-gray-500 text-sm">
                     {item.product.productDescription}

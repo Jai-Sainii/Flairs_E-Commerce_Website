@@ -19,6 +19,8 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ message: "No order items" });
     }
 
+    const products = await Product.find({ _id: { $in: orderItems.map(item => item.product) } });
+
     for (const item of orderItems) {
       const product = await Product.findById(item.product);
       if (!product) {

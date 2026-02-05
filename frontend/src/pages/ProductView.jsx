@@ -35,6 +35,7 @@ const ProductView = () => {
         `${API_BASE_URL}/cart/add`,
         {
           productId: product._id,
+          productSize: selectedSize,
           quantity: 1,
         },
         {
