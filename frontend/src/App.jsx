@@ -1,8 +1,6 @@
 import { Routes, Route } from "react-router";
 import "./App.css";
-import Users from "./pages/Users";
 import Signup from "./components/Signup";
-import Login from "./components/Login";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Collection from "./pages/Collection";
@@ -47,9 +45,7 @@ function App() {
             <Route path="/collection" element={<Collection />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/users" element={<Users />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
             <Route
               path="/checkout"
               element={

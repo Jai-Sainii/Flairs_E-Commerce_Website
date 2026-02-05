@@ -38,7 +38,7 @@ const Navbar = () => {
       navigate("/profile");
     } else {
       toast.info("Please login to view your profile");
-      navigate("/login");
+      navigate("/signup");
     }
   };
 
