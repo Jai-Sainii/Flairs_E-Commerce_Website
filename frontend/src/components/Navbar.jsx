@@ -251,7 +251,7 @@ const Navbar = () => {
               ) : (
                 <button
                   onClick={() => {
-                    navigate("/login");
+                    navigate("/signup");
                     setVisible(false);
                   }}
                   className="w-full bg-pink-500 text-white py-2 rounded-full mt-4"

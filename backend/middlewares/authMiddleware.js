@@ -19,7 +19,7 @@ export const signup = async (req, res) => {
     
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ success: false, message: 'Email is already registered' });
+      return res.status(400).json({ success: false, message: 'Email is already registered. Login instead' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -119,7 +119,8 @@ export const protect = async(req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(401).json({ success: false, message: 'No token provided' });
+    // No token provided!
+    return res.status(401).json({ success: false, message: 'No Signup / Login detected' });
   }
 
   try {
@@ -127,6 +128,7 @@ export const protect = async(req, res, next) => {
     req.user = await User.findById(decoded.id).select("-password");
     next();
   } catch (error) {
-    res.status(401).json({ success: false, message: 'Invalid or expired token' });
+    // For invalid or experied token!
+    res.status(401).json({ success: false, message: 'Signup / Login Expired' });
   }
 };

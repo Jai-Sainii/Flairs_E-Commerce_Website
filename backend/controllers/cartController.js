@@ -26,7 +26,7 @@ export const addItemToCart = async (req, res) => {
     }
 
     const itemIndex = cart.items.findIndex(
-      (i) => i.product.toString() === productId && i.size === productSize,
+      (i) => i.product.toString() === productId && i.selectedSize === productSize,
     );
 
     if (itemIndex > -1) {
