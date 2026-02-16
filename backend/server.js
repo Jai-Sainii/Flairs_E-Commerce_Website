@@ -10,6 +10,7 @@ import productRouter from "./routes/productRoutes.js"
 import contactRouter from "./routes/contactRoutes.js"
 import cartRoutes from "./routes/cartRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
+import adminRoutes from "./routes/adminRoutes.js"
 
 
 dotenv.config()
@@ -17,7 +18,7 @@ const app = express()
 app.use(cookieParser());
 app.use(express.json())
 app.use(cors({
-  origin: [process.env.CLIENT_URL, process.env.BACKEND_URL],
+  origin: [process.env.CLIENT_URL, process.env.ADMIN_URL],
   credentials: true 
 }))
 
@@ -28,6 +29,7 @@ app.use("/products", productRouter)
 app.use("/contacts", contactRouter)
 app.use("/cart", cartRoutes)
 app.use("/orders", orderRoutes)
+app.use("/admin", adminRoutes)
 
 const connectDB = async () => {
     const connect = await mongoose.connect(process.env.MONGO_URI)
