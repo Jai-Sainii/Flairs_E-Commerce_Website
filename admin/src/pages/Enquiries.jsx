@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import EnquiryCard from "../components/EnquiryCard";
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 
 const Enquiries = () => {
   const [enquiries, setEnquiries] = useState([]);
@@ -9,7 +10,7 @@ const Enquiries = () => {
   useEffect(() => {
     const fetchEnquiries = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/admin/getAllContactInfo", {
+        const res = await axios.get(`${API_BASE_URL}/admin/getAllContactInfo`, {
           withCredentials: true,
         });
         setEnquiries(res.data);

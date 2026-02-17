@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../api";
 
 function ProductCard({ product, fetchProducts }) {
-
   const navigate = useNavigate();
 
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/admin/deleteProduct/${id}`, {
+      await axios.delete(`${API_BASE_URL}/admin/deleteProduct/${id}`, {
         withCredentials: true,
       });
       fetchProducts();
@@ -18,7 +18,6 @@ function ProductCard({ product, fetchProducts }) {
 
   return (
     <div className="bg-white shadow-md hover:shadow-xl transition overflow-hidden border border-pink-100">
-
       <div className="h-56 w-full bg-pink-50 overflow-hidden">
         <img
           src={product.productImages[0]}
@@ -52,7 +51,6 @@ function ProductCard({ product, fetchProducts }) {
           {product.productDescription}
         </p>
 
-
         <div className="flex flex-wrap gap-2">
           {product.productSize.map((size) => (
             <span
@@ -71,9 +69,7 @@ function ProductCard({ product, fetchProducts }) {
 
           <span
             className={`text-sm font-medium ${
-              product.stockQuantity > 0
-                ? "text-green-600"
-                : "text-red-500"
+              product.stockQuantity > 0 ? "text-green-600" : "text-red-500"
             }`}
           >
             {product.stockQuantity > 0
@@ -82,12 +78,17 @@ function ProductCard({ product, fetchProducts }) {
           </span>
         </div>
 
-
         <div className="flex gap-3 pt-3">
-          <button onClick={() => navigate(`/editProduct/${product._id}`)} className="flex-1 bg-black text-white py-2 text-sm font-semibold hover:bg-pink-500 transition">
+          <button
+            onClick={() => navigate(`/editProduct/${product._id}`)}
+            className="flex-1 bg-black text-white py-2 text-sm font-semibold hover:bg-pink-500 transition"
+          >
             Edit
           </button>
-          <button onClick={() => deleteProduct(product._id)} className="flex-1 border border-red-600 text-red-600 py-2 text-sm font-semibold hover:bg-red-500 hover:text-white transition">
+          <button
+            onClick={() => deleteProduct(product._id)}
+            className="flex-1 border border-red-600 text-red-600 py-2 text-sm font-semibold hover:bg-red-500 hover:text-white transition"
+          >
             Delete
           </button>
         </div>

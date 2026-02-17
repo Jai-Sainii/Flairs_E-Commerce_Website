@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../api";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -13,10 +14,10 @@ const AddProduct = () => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post("http://localhost:5000/admin/addProduct", data, {
+      const res = await axios.post(`${API_BASE_URL}/admin/addProduct`, data, {
         withCredentials: true,
       });
-      navigate('/');
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
@@ -43,7 +44,9 @@ const AddProduct = () => {
           </label>
           <input
             type="text"
-            {...register("productName", { required: "Product name is required" })}
+            {...register("productName", {
+              required: "Product name is required",
+            })}
             className="border border-black px-4 py-2 text-sm
               focus:border-pink-500 focus:ring-2 focus:ring-pink-400 outline-none"
           />
@@ -56,11 +59,11 @@ const AddProduct = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-black">
-              Category
-            </label>
+            <label className="text-sm font-semibold text-black">Category</label>
             <select
-              {...register("productCategory", { required: "Category is required" })}
+              {...register("productCategory", {
+                required: "Category is required",
+              })}
               className="border border-black px-4 py-2 text-sm
                 focus:border-pink-500 focus:ring-2 focus:ring-pink-400 outline-none"
             >
@@ -81,7 +84,9 @@ const AddProduct = () => {
               Product Type
             </label>
             <select
-              {...register("productType", { required: "Product type is required" })}
+              {...register("productType", {
+                required: "Product type is required",
+              })}
               className="border border-black px-4 py-2 text-sm
                 focus:border-pink-500 focus:ring-2 focus:ring-pink-400 outline-none"
             >
@@ -100,9 +105,7 @@ const AddProduct = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-black">
-              Price
-            </label>
+            <label className="text-sm font-semibold text-black">Price</label>
             <input
               type="number"
               {...register("productPrice", {
