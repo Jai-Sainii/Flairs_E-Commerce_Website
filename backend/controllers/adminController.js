@@ -36,6 +36,7 @@ export const registerAdmin = async (req, res) => {
       httpOnly: true,
       secure: true, 
       sameSite: "none",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
 
@@ -78,6 +79,7 @@ export const loginAdmin = async (req, res) => {
       httpOnly: true,
       secure: true, 
       sameSite: "none",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
 
@@ -87,6 +89,20 @@ export const loginAdmin = async (req, res) => {
     console.error('Login Error:', error);
     res.status(500).json({ success: false, message: `Server error ${JWT_SECRET}` });
   }
+};
+
+export const logoutAdmin = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
 };
 
 export const getAllProducts = async (req, res) => {
@@ -103,7 +119,7 @@ export const addProduct = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+  }
 
 export const editProduct = async (req, res) => {
     try {
@@ -197,10 +213,6 @@ export const protectAdmin = async(req, res, next) => {
   }
 };
 
-export const logoutAdmin = (req, res) => {
-  res.clearCookie("token");
-  res.json({ success: true, message: "Logged out successfully" });
-};
 
 export const me = async (req, res) => {
   const token = req.cookies.token;
