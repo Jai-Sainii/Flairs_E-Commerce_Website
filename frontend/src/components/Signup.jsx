@@ -143,10 +143,11 @@ const Signup = () => {
             <button
               type="submit"
               disabled={isSignupSubmitting}
-              className="w-full py-2 bg-pink-500 text-white font-medium hover:bg-pink-600 disabled:bg-pink-300 transition"
+              className="button"
             >
-              {isSignupSubmitting ? "Submitting..." : "Submit"}
+              {isSignupSubmitting ? "Submitting..." : "Get Started"}
             </button>
+
           </form>
         </div>
       ) : (
@@ -215,9 +216,9 @@ const Signup = () => {
             <button
               type="submit"
               disabled={isLoginSubmitting}
-              className="w-full py-2 bg-pink-500 text-white font-medium hover:bg-pink-600 disabled:bg-pink-300 transition"
+              className="button"
             >
-              {isLoginSubmitting ? "Submitting..." : "Submit"}
+              {isLoginSubmitting ? "Submitting..." : "Welcome back"}
             </button>
           </form>
         </div>

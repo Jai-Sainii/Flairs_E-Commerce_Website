@@ -128,7 +128,7 @@ const Cart = () => {
               onClick={placeOrder}
               className="text-black px-6 py-2 border-[1px] border-gray-500 cursor-pointer"
             >
-              Place Order
+              Checkout
             </button>
           </div>
         </>

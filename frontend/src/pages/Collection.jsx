@@ -5,6 +5,28 @@ import { API_BASE_URL } from "../api";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
+const SkeletonCard = () => (
+  <div className="bg-white shadow-md overflow-hidden border border-gray-200 animate-pulse">
+    <div className="h-60 w-full bg-gray-200" />
+
+    <div className="p-4">
+      <div className="h-5 bg-gray-200 rounded w-3/4 mb-2" />
+      <div className="h-3 bg-gray-200 rounded w-1/3 mb-3" />
+      <div className="h-3 bg-gray-200 rounded w-full mb-1" />
+      <div className="h-3 bg-gray-200 rounded w-5/6 mb-3" />
+      <div className="flex gap-2 mb-3">
+        <div className="h-6 w-10 bg-gray-200 rounded-full" />
+        <div className="h-6 w-10 bg-gray-200 rounded-full" />
+        <div className="h-6 w-10 bg-gray-200 rounded-full" />
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="h-5 bg-gray-200 rounded w-16" />
+        <div className="h-5 bg-gray-200 rounded w-8" />
+      </div>
+    </div>
+  </div>
+);
+
 const Collection = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -12,16 +34,20 @@ const Collection = () => {
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilter, setShowFilter] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const location = useLocation();
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       let res = await axios.get(`${API_BASE_URL}/products`);
       setProducts(res.data.product);
       setFilteredProducts(res.data.product);
     } catch (err) {
       console.error("Error fetching products:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,7 +117,6 @@ const Collection = () => {
             </span>
           </p>
 
-          {/* Filter Categories */}
           <div
             className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? "" : "hidden"} sm:block`}
           >
@@ -112,7 +137,6 @@ const Collection = () => {
             </div>
           </div>
 
-          {/* Filter Types */}
           <div
             className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? "" : "hidden"} sm:block`}
           >
@@ -141,17 +165,20 @@ const Collection = () => {
               <h1 className="text-3xl">All the Products</h1>
             </div>
 
-            {filteredProducts.length === 0 ? (
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <SkeletonCard key={i} />
+                ))}
+              </div>
+            ) : filteredProducts.length === 0 ? (
               <p className="text-gray-500 text-center py-10">
                 No products found.
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredProducts.map((product, index) => (
-                  <ProductCard
-                    key={index}
-                    product={product}
-                  />
+                  <ProductCard key={index} product={product} />
                 ))}
               </div>
             )}
