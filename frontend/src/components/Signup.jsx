@@ -63,7 +63,7 @@ const Signup = () => {
   return (
     <>
       {check ? (
-        <div className="w-full max-w-md flex flex-col mx-auto mt-28 mb-14 p-6 items-center justify-center">
+        <div className="w-full max-w-md flex flex-col mx-auto mt-28 mb-14 p-6 items-center justify-center overflow-hidden">
           <div className="text-center mb-4 md:mb-8">
             <div className="flex items-center justify-center">
               <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">
@@ -147,11 +147,10 @@ const Signup = () => {
             >
               {isSignupSubmitting ? "Submitting..." : "Get Started"}
             </button>
-
           </form>
         </div>
       ) : (
-        <div className="w-full max-w-md flex flex-col items-center justify-center mx-auto mt-28 mb-14 p-6">
+        <div className="w-full max-w-md flex flex-col items-center justify-center mx-auto mt-28 mb-14 p-6 overflow-hidden">
           <form
             className="w-full space-y-4"
             onSubmit={handleSubmitLogin(onSubmitLogin)}
