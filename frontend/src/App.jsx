@@ -16,11 +16,13 @@ import ProtectedRoute from "./router/ProtectedRoute";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import OrdersPage from "./pages/OrdersPage";
+import LoadingScreen from "./pages/LoadingScreen";
 
 function App() {
   return (
     <>
       <div className="flex flex-col min-h-screen">
+        <LoadingScreen />
         <Navbar />
         <main className="flex-grow">
           <Routes>

@@ -66,6 +66,18 @@ const Collection = () => {
   };
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const query = params.get("search") || "";
+    setSearchQuery(query);
+
+    // If the search query is a category, auto-select it in the filter
+    const categoryTerms = ["men", "women", "kids"];
+    if (categoryTerms.includes(query.toLowerCase())) {
+      setSelectedCategories([query.toLowerCase()]);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
     let updatedList = [...products];
 
     if (selectedCategories.length > 0) {
@@ -80,22 +92,19 @@ const Collection = () => {
       );
     }
 
-    setFilteredProducts(updatedList);
-
-    const params = new URLSearchParams(location.search);
-    const query = params.get("search") || "";
-    setSearchQuery(query);
-  }, [selectedCategories, selectedTypes, products, location.search]);
-
-  useEffect(() => {
-    let updatedList = [...products];
-    if (searchQuery.trim() !== "") {
+    // Only apply text search for non-category queries
+    const categoryTerms = ["men", "women", "kids"];
+    if (
+      searchQuery.trim() !== "" &&
+      !categoryTerms.includes(searchQuery.toLowerCase())
+    ) {
       updatedList = updatedList.filter((product) =>
         product.productName.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
+
     setFilteredProducts(updatedList);
-  }, [products, searchQuery]);
+  }, [selectedCategories, selectedTypes, products, searchQuery]);
 
   useEffect(() => {
     fetchData();
