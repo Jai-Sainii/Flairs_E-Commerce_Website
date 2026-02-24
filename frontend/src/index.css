@@ -15,7 +15,7 @@
     @apply font-sans text-zinc-900 bg-white;
   }
   
-  h1, h2, h3, h4 {
+  h1, h2, h4 {
     @apply font-serif;
   }
 }

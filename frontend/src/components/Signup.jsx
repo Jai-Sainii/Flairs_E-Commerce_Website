@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { motion, AnimatePresence } from "framer-motion";
+import { User, Mail, Lock, ArrowRight, Chrome, Github } from "lucide-react";
 
 const Signup = () => {
   const { signup, login } = useAuth();
   const navigate = useNavigate();
-  const [check, setCheck] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
 
   const {
     register: registerSignup,
@@ -24,7 +26,6 @@ const Signup = () => {
   const onSubmitSignup = async (data) => {
     try {
       const success = await signup(data.name, data.email, data.password);
-
       if (success) {
         toast.success("Account created successfully!");
         navigate("/");
@@ -37,10 +38,9 @@ const Signup = () => {
     }
   };
 
-  const onSubmitLogin = async (Logindata) => {
+  const onSubmitLogin = async (data) => {
     try {
-      const success = await login(Logindata.email, Logindata.password);
-
+      const success = await login(data.email, data.password);
       if (success) {
         toast.success("Login successful!");
         navigate("/");
@@ -53,176 +53,205 @@ const Signup = () => {
     }
   };
 
-  const handleLogin = () => {
-    setCheck(false);
-  };
-  const handleSignup = () => {
-    setCheck(true);
-  };
-
   return (
-    <>
-      {check ? (
-        <div className="w-full max-w-md flex flex-col mx-auto mt-28 mb-14 p-6 items-center justify-center overflow-hidden">
-          <div className="text-center mb-4 md:mb-8">
-            <div className="flex items-center justify-center">
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">
-                SignUp
-              </h2>
-              <span className="block w-12 h-0.5 bg-gray-700 ml-4"></span>
-            </div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={isLogin ? "login" : "signup"}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="w-full max-w-lg p-10 rounded-3xl glass-card shadow-2xl relative overflow-hidden"
+      >
+
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-flaire-pink/20 blur-3xl rounded-full"></div>
+        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-flaire-orange/20 blur-3xl rounded-full"></div>
+
+        <div className="relative z-10">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-serif font-bold text-white mb-2">
+              {isLogin ? "Welcome Back" : "Create Account"}
+            </h2>
+            <p className="text-zinc-400 text-sm">
+              {isLogin
+                ? "Enter your credentials to access your account"
+                : "Join the Flaire community today"}
+            </p>
           </div>
 
-          <form
-            className="w-full space-y-4"
-            onSubmit={handleSubmitSignup(onSubmitSignup)}
-          >
-            <div>
-              <input
-                placeholder="Name"
-                type="text"
-                className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-pink-400"
-                {...registerSignup("name", {
-                  required: { value: true, message: "This field is required" },
-                  minLength: { value: 4, message: "Min length is 4" },
-                })}
-              />
-              {signupErrors.name && (
-                <div className="text-red-500 text-sm mt-1">
-                  {signupErrors.name.message}
-                </div>
-              )}
-            </div>
 
-            <div>
-              <input
-                placeholder="Email"
-                type="email"
-                className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-pink-400"
-                {...registerSignup("email", {
-                  required: { value: true, message: "This field is required" },
-                  minLength: { value: 4, message: "Min length is 4" },
-                })}
-              />
-              {signupErrors.email && (
-                <div className="text-red-500 text-sm mt-1">
-                  {signupErrors.email.message}
-                </div>
-              )}
-            </div>
-
-            <div>
-              <input
-                placeholder="Password"
-                type="password"
-                className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-pink-400"
-                {...registerSignup("password", {
-                  minLength: {
-                    value: 8,
-                    message: "Min length of password is 8",
-                  },
-                })}
-              />
-              {signupErrors.password && (
-                <div className="text-red-500 text-sm mt-1">
-                  {signupErrors.password.message}
-                </div>
-              )}
-            </div>
-
-            <div className="flex flex-row items-center justify-between">
-              <span className="text-sm cursor-pointer"></span>
-              <span
-                onClick={handleLogin}
-                className="text-sm cursor-pointer font-medium"
-              >
-                Login ?
-              </span>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSignupSubmitting}
-              className="button"
+          {!isLogin && (
+            <form
+              className="space-y-4"
+              onSubmit={handleSubmitSignup(onSubmitSignup)}
             >
-              {isSignupSubmitting ? "Submitting..." : "Get Started"}
-            </button>
-          </form>
-        </div>
-      ) : (
-        <div className="w-full max-w-md flex flex-col items-center justify-center mx-auto mt-28 mb-14 p-6 overflow-hidden">
-          <form
-            className="w-full space-y-4"
-            onSubmit={handleSubmitLogin(onSubmitLogin)}
-          >
-            <div className="text-center mb-4 md:mb-8">
-              <div className="flex items-center justify-center">
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">
-                  Login
-                </h2>
-                <span className="block w-12 h-0.5 bg-gray-700 ml-4"></span>
+              <div className="relative">
+                <User
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  {...registerSignup("name", {
+                    required: "Name is required",
+                  })}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-flaire-pink/50 transition-all"
+                />
+                {signupErrors.name && (
+                  <p className="text-red-400 text-xs mt-1 pl-2">
+                    {signupErrors.name.message}
+                  </p>
+                )}
               </div>
-            </div>
 
-            <div>
-              <input
-                placeholder="Email"
-                type="email"
-                className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-pink-400"
-                {...registerLogin("email", {
-                  required: { value: true, message: "This field is required" },
-                  minLength: { value: 4, message: "Min length is 4" },
-                })}
-              />
-              {loginErrors.email && (
-                <div className="text-red-500 text-sm mt-1">
-                  {loginErrors.email.message}
-                </div>
-              )}
-            </div>
+              <div className="relative">
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+                  size={18}
+                />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  {...registerSignup("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Enter a valid email",
+                    },
+                  })}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-flaire-pink/50 transition-all"
+                />
+                {signupErrors.email && (
+                  <p className="text-red-400 text-xs mt-1 pl-2">
+                    {signupErrors.email.message}
+                  </p>
+                )}
+              </div>
 
-            <div>
-              <input
-                placeholder="Password"
-                type="password"
-                className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-pink-400"
-                {...registerLogin("password", {
-                  minLength: {
-                    value: 8,
-                    message: "Min length of password is 8",
-                  },
-                })}
-              />
-              {loginErrors.password && (
-                <div className="text-red-500 text-sm mt-1">
-                  {loginErrors.password.message}
-                </div>
-              )}
-            </div>
+              <div className="relative">
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+                  size={18}
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  {...registerSignup("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-flaire-pink/50 transition-all"
+                />
+                {signupErrors.password && (
+                  <p className="text-red-400 text-xs mt-1 pl-2">
+                    {signupErrors.password.message}
+                  </p>
+                )}
+              </div>
 
-            <div className="flex flex-row items-center justify-between">
-              <span className="text-sm cursor-pointer font-medium">
-                Forgot Password ?
-              </span>
-              <span
-                onClick={handleSignup}
-                className="text-sm cursor-pointer font-medium"
+              <button
+                type="submit"
+                disabled={isSignupSubmitting}
+                className="w-full bg-white text-zinc-950 font-bold py-3.5 rounded-2xl flex items-center justify-center space-x-2 hover:bg-zinc-200 transition-all group disabled:opacity-50"
               >
-                Create account
-              </span>
-            </div>
+                <span>{isSignupSubmitting ? "Signing Up..." : "Sign Up"}</span>
+                <ArrowRight
+                  size={18}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </button>
+            </form>
+          )}
 
-            <button
-              type="submit"
-              disabled={isLoginSubmitting}
-              className="button"
+
+          {isLogin && (
+            <form
+              className="space-y-4"
+              onSubmit={handleSubmitLogin(onSubmitLogin)}
             >
-              {isLoginSubmitting ? "Submitting..." : "Welcome back"}
+              <div className="relative">
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+                  size={18}
+                />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  {...registerLogin("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Enter a valid email",
+                    },
+                  })}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-flaire-pink/50 transition-all"
+                />
+                {loginErrors.email && (
+                  <p className="text-red-400 text-xs mt-1 pl-2">
+                    {loginErrors.email.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="relative">
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+                  size={18}
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  {...registerLogin("password", {
+                    required: "Password is required",
+                  })}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-flaire-pink/50 transition-all"
+                />
+                {loginErrors.password && (
+                  <p className="text-red-400 text-xs mt-1 pl-2">
+                    {loginErrors.password.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  className="text-xs text-flaire-pink hover:text-flaire-orange transition-colors"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoginSubmitting}
+                className="w-full bg-white text-zinc-950 font-bold py-3.5 rounded-2xl flex items-center justify-center space-x-2 hover:bg-zinc-200 transition-all group disabled:opacity-50"
+              >
+                <span>{isLoginSubmitting ? "Signing In..." : "Sign In"}</span>
+                <ArrowRight
+                  size={18}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </button>
+            </form>
+          )}
+
+          <p className="mt-8 text-center text-zinc-500 text-sm">
+            {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-white font-semibold hover:text-flaire-pink transition-colors"
+            >
+              {isLogin ? "Sign Up" : "Sign In"}
             </button>
-          </form>
+          </p>
         </div>
-      )}
-    </>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

@@ -16,7 +16,7 @@ const Hero = () => {
               transition={{ duration: 0.6 }}
             >
               <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold text-zinc-900 mb-3 md:mb-4 tracking-tighter">
-                Flaire.
+                Flaire
               </h1>
               <p className="text-xl sm:text-2xl md:text-3xl font-serif italic text-zinc-800 mb-6 md:mb-8">
                 Ditch the Fashion.

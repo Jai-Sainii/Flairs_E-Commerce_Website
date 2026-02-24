@@ -23,7 +23,7 @@ const Footer = () => {
           
           <div className="md:col-span-2">
             <h2 className="text-2xl font-bold text-gray-800">
-              Flaire<span className="text-pink-500">.</span>
+              Flaire
             </h2>
             <p className="mt-4 text-gray-500 max-w-md">
               Flaire, founded in 2025, was created to make fashion simple, stylish, and accessible. We bring you the latest trends and timeless pieces to help you express your unique style
@@ -64,7 +64,7 @@ const Footer = () => {
 
         <div className="mt-12 border-t border-gray-200 pt-8 text-center">
           <p className="text-sm text-gray-500">
-            Copyright 2025@ Developer Jai - All Right Reserved.
+            Copyright 2025@Flaire - All Right Reserved.
           </p>
         </div>
 

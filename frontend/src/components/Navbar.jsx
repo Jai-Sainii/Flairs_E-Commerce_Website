@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, ShoppingBag } from "lucide-react";
 import gsap from "gsap";
 
 const navLinks = [
   { label: "Home", to: "/" },
   { label: "Collection", to: "/collection" },
   { label: "About", to: "/about" },
-  { label: "Contact", to: "/contact" },
+  { label: "Support", to: "/contact" },
 ];
 
 const Navbar = () => {
@@ -20,12 +20,11 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [visible, setVisible] = useState(false);
 
-  // Refs for GSAP pill animation
+
   const navRefs = useRef([]);
   const pillRef = useRef(null);
   const navContainerRef = useRef(null);
 
-  // Animate the pill indicator to the active link
   const animatePill = () => {
     const currentPath = location.pathname;
     const activeIndex = navLinks.findIndex((link) => {
@@ -57,7 +56,7 @@ const Navbar = () => {
     animatePill();
   }, [location.pathname]);
 
-  // Re-calculate on window resize
+
   useEffect(() => {
     const handleResize = () => animatePill();
     window.addEventListener("resize", handleResize);
@@ -103,22 +102,19 @@ const Navbar = () => {
   return (
     <div className="w-full flex fixed z-50 items-center justify-center mt-4 px-4">
       <div className="w-[94%] flex items-center justify-between py-3 px-6 font-medium rounded-2xl bg-white/30 backdrop-blur-xl border border-white/20 shadow-lg shadow-black/5">
-        {/* Logo */}
         <div>
           <h2
             className="text-2xl font-bold text-gray-800 cursor-pointer"
             onClick={() => navigate("/")}
           >
-            Flaire<span className="text-pink-500">.</span>
+            Flaire
           </h2>
         </div>
 
-        {/* Desktop Nav Links with GSAP pill */}
         <ul
           ref={navContainerRef}
           className="hidden sm:flex items-center gap-1 text-sm text-gray-600 relative"
         >
-          {/* Animated pill indicator */}
           <div
             ref={pillRef}
             className="absolute top-1/2 -translate-y-1/2 h-[36px] bg-pink-500/10 rounded-full pointer-events-none"
@@ -143,9 +139,9 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* Right-side icons */}
+
         <div className="flex items-center gap-4">
-          {/* Search */}
+
           <div className="relative flex items-center">
             {showSearch ? (
               <div className="flex items-center border border-gray-200 rounded-full px-3 py-1.5 bg-white/40 backdrop-blur-md">
@@ -171,13 +167,14 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Cart */}
-          <i
+ 
+          <ShoppingBag
             onClick={handleCart}
-            className="fa-solid text-[18px] fa-cart-shopping cursor-pointer text-gray-600 hover:text-pink-500 transition-colors"
-          ></i>
+            size={20}
+            className="cursor-pointer text-gray-600 hover:text-pink-500 transition-colors"
+          />
 
-          {/* Desktop Profile dropdown */}
+
           <div className="group relative hidden sm:block border border-gray-200 rounded-full">
             <div className="py-2 px-4 border border-white/30 rounded-full cursor-pointer flex items-center gap-2 bg-white/20 hover:bg-white/40 backdrop-blur-md transition-all duration-200">
               <i className="fa-solid fa-user text-gray-600"></i>

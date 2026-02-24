@@ -1,6 +1,6 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, useLocation } from "react-router";
 import "./App.css";
-import Signup from "./components/Signup";
+import LoginandSignup from "./pages/LoginandSignup";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Collection from "./pages/Collection";
@@ -19,11 +19,14 @@ import OrdersPage from "./pages/OrdersPage";
 import LoadingScreen from "./pages/LoadingScreen";
 
 function App() {
+  const location = useLocation();
+  const isSignupPage = location.pathname === "/signup";
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <LoadingScreen />
-        <Navbar />
+        {!isSignupPage && <LoadingScreen />}
+        {!isSignupPage && <Navbar />}
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -47,7 +50,7 @@ function App() {
             <Route path="/collection" element={<Collection />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/signup" element={<LoginandSignup />} />
             <Route
               path="/checkout"
               element={
@@ -74,18 +77,18 @@ function App() {
             />
           </Routes>
         </main>
-        <Footer />
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          pauseOnHover
-          draggable
-          theme="colored"
-        />
+        {!isSignupPage && <Footer />}
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
     </>
   );
 }
