@@ -4,6 +4,8 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import { Menu, X, User, ShoppingBag } from "lucide-react";
 import gsap from "gsap";
+import axios from "axios";
+import { API_BASE_URL } from "../api";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -19,7 +21,28 @@ const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [visible, setVisible] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
+  // Fetch cart count
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      if (!user) {
+        setCartCount(0);
+        return;
+      }
+      try {
+        const res = await axios.get(`${API_BASE_URL}/cart`, {
+          withCredentials: true,
+        });
+        const items = res.data?.items || [];
+        const total = items.reduce((sum, item) => sum + item.quantity, 0);
+        setCartCount(total);
+      } catch {
+        setCartCount(0);
+      }
+    };
+    fetchCartCount();
+  }, [user, location.pathname]);
 
   const navRefs = useRef([]);
   const pillRef = useRef(null);
@@ -55,7 +78,6 @@ const Navbar = () => {
   useLayoutEffect(() => {
     animatePill();
   }, [location.pathname]);
-
 
   useEffect(() => {
     const handleResize = () => animatePill();
@@ -139,9 +161,7 @@ const Navbar = () => {
           ))}
         </ul>
 
-
         <div className="flex items-center gap-4">
-
           <div className="relative flex items-center">
             {showSearch ? (
               <div className="flex items-center border border-gray-200 rounded-full px-3 py-1.5 bg-white/40 backdrop-blur-md">
@@ -167,13 +187,17 @@ const Navbar = () => {
             )}
           </div>
 
- 
-          <ShoppingBag
-            onClick={handleCart}
-            size={20}
-            className="cursor-pointer text-gray-600 hover:text-pink-500 transition-colors"
-          />
-
+          <div onClick={handleCart} className="relative cursor-pointer">
+            <ShoppingBag
+              size={20}
+              className="text-gray-600 hover:text-pink-500 transition-colors"
+            />
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                {cartCount}
+              </span>
+            )}
+          </div>
 
           <div className="group relative hidden sm:block border border-gray-200 rounded-full">
             <div className="py-2 px-4 border border-white/30 rounded-full cursor-pointer flex items-center gap-2 bg-white/20 hover:bg-white/40 backdrop-blur-md transition-all duration-200">
