@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { API_BASE_URL } from "../api";
 
 
 export default function NewsLetter() {
@@ -13,7 +14,7 @@ export default function NewsLetter() {
         e.preventDefault();
         try {
             setSending(true);
-            await axios.post("http://localhost:5000/newsletter/subscribe", { email });
+            await axios.post(`${API_BASE_URL}/newsletter/subscribe`, { email });
             setSuccess("Subscribed successfully");
             setError("");
             toast.success("Subscribed successfully");
