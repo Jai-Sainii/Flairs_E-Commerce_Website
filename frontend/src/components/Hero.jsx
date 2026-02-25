@@ -21,7 +21,10 @@ const Hero = () => {
               <p className="text-xl sm:text-2xl md:text-3xl font-serif italic text-zinc-800 mb-6 md:mb-8">
                 Ditch the Fashion.
               </p>
-              <button onClick={() => navigate("/collection")} className="group flex items-center space-x-2 bg-zinc-900 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-medium hover:bg-zinc-800 transition-all text-sm sm:text-base">
+              <button
+                onClick={() => navigate("/collection")}
+                className="group flex items-center space-x-2 bg-zinc-900 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-medium hover:bg-zinc-800 transition-all text-sm sm:text-base"
+              >
                 <span>Shop Collection</span>
                 <ArrowRight
                   size={18}
@@ -31,14 +34,14 @@ const Hero = () => {
             </motion.div>
           </div>
 
-          <div className="relative md:absolute md:right-0 md:bottom-0 w-full md:w-1/2 md:h-full flex items-end justify-center md:justify-end">
+          <div className="relative md:absolute md:right-0 md:top-0 md:bottom-0 w-full md:w-1/2 md:h-full flex items-end md:items-stretch justify-center md:justify-end">
             <motion.img
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800"
               alt="Model in purple top"
-              className="h-[280px] sm:h-[350px] md:h-[90%] object-contain"
+              className="h-[200px] sm:h-[350px] md:h-full object-cover"
               referrerPolicy="no-referrer"
             />
           </div>

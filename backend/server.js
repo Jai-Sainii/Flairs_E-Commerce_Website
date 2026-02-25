@@ -11,6 +11,7 @@ import contactRouter from "./routes/contactRoutes.js"
 import cartRoutes from "./routes/cartRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
+import newsLetterRoutes from "./routes/newsLetterRoutes.js"
 
 
 dotenv.config()
@@ -30,6 +31,7 @@ app.use("/contacts", contactRouter)
 app.use("/cart", cartRoutes)
 app.use("/orders", orderRoutes)
 app.use("/admin", adminRoutes)
+app.use("/newsletter", newsLetterRoutes)
 
 const connectDB = async () => {
     const connect = await mongoose.connect(process.env.MONGO_URI)

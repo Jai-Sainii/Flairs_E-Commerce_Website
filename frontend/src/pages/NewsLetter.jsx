@@ -1,5 +1,32 @@
+import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+
 export default function NewsLetter() {
-  return (
+    const [email, setEmail] = useState("");
+    const [sending, setSending] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            setSending(true);
+            await axios.post("http://localhost:5000/newsletter/subscribe", { email });
+            setSuccess("Subscribed successfully");
+            setError("");
+            toast.success("Subscribed successfully");
+            setSending(false);
+        } catch (error) {
+            setError("Failed to subscribe");
+            setSuccess("");
+            toast.error("Failed to subscribe: " + error.response.data.message);
+            setSending(false);
+        }
+    };
+
+    return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="relative rounded-3xl overflow-hidden bg-zinc-900 py-20 px-8 text-center">
@@ -16,12 +43,15 @@ export default function NewsLetter() {
                 type="email"
                 placeholder="Enter your email"
                 className="bg-white/10 border border-white/20 rounded-full px-6 py-4 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-flaire-coral flex-grow max-w-md"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <button
                 type="submit"
                 className="bg-flaire-coral text-zinc-900 font-bold px-8 py-4 rounded-full hover:bg-flaire-orange transition-colors"
+                onClick={handleSubmit}
               >
-                Subscribe
+                {sending? "Sending..." : "Subscribe"}
               </button>
             </form>
           </div>
