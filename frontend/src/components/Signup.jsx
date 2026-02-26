@@ -4,10 +4,11 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Mail, Lock, ArrowRight, Chrome, Github } from "lucide-react";
+import { User, Mail, Lock, ArrowRight } from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Signup = () => {
-  const { signup, login } = useAuth();
+  const { signup, login, googleLogin } = useAuth();
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
 
@@ -53,6 +54,21 @@ const Signup = () => {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const success = await googleLogin(credentialResponse.credential);
+      if (success) {
+        toast.success("Google login successful!");
+        navigate("/");
+      } else {
+        toast.error("Google login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      toast.error("Google login failed. Please try again.");
+    }
+  };
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -63,7 +79,6 @@ const Signup = () => {
         transition={{ duration: 0.4, ease: "easeOut" }}
         className="w-full max-w-lg p-10 rounded-3xl glass-card shadow-2xl relative overflow-hidden"
       >
-
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-flaire-pink/20 blur-3xl rounded-full"></div>
         <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-flaire-orange/20 blur-3xl rounded-full"></div>
 
@@ -78,7 +93,6 @@ const Signup = () => {
                 : "Join the Flaire community today"}
             </p>
           </div>
-
 
           {!isLogin && (
             <form
@@ -164,9 +178,28 @@ const Signup = () => {
                   className="group-hover:translate-x-1 transition-transform"
                 />
               </button>
+
+              <div className="flex items-center my-5">
+                <div className="flex-grow h-px bg-white/10"></div>
+                <span className="px-4 text-xs text-zinc-500 uppercase tracking-widest">
+                  or
+                </span>
+                <div className="flex-grow h-px bg-white/10"></div>
+              </div>
+
+              <div className="flex justify-center [&_iframe]:rounded-2xl">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => toast.error("Google login failed")}
+                  theme="filled_black"
+                  shape="pill"
+                  size="large"
+                  width="100%"
+                  text="continue_with"
+                />
+              </div>
             </form>
           )}
-
 
           {isLogin && (
             <form
@@ -237,6 +270,26 @@ const Signup = () => {
                   className="group-hover:translate-x-1 transition-transform"
                 />
               </button>
+
+              <div className="flex items-center my-5">
+                <div className="flex-grow h-px bg-white/10"></div>
+                <span className="px-4 text-xs text-zinc-500 uppercase tracking-widest">
+                  or
+                </span>
+                <div className="flex-grow h-px bg-white/10"></div>
+              </div>
+
+              <div className="flex justify-center [&_iframe]:rounded-2xl">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => toast.error("Google login failed")}
+                  theme="filled_black"
+                  shape="pill"
+                  size="large"
+                  width="100%"
+                  text="continue_with"
+                />
+              </div>
             </form>
           )}
 

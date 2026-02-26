@@ -162,7 +162,7 @@ const ProductView = () => {
               onClick={handleAddToCart}
               className="mt-6 w-full bg-gray-900 text-white font-semibold py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300 shadow-md"
             >
-              ADD TO CART
+              {isAddingToCart? "ADDING": "ADD TO CART"}
             </button>
 
             {/* Product Details/Guarantees */}

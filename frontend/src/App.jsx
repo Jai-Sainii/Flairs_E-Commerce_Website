@@ -17,6 +17,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import OrdersPage from "./pages/OrdersPage";
 import LoadingScreen from "./pages/LoadingScreen";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const location = useLocation();
@@ -75,6 +76,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         {!isSignupPage && <Footer />}

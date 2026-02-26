@@ -58,6 +58,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const googleLogin = async (credential) => {
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/api/auth/google`,
+        { credential },
+        { withCredentials: true },
+      );
+      setUser(res.data.user);
+      setLoading(false);
+      return true;
+    } catch (err) {
+      console.error("Google login failed:", err.response?.data || err);
+      return false;
+    }
+  };
+
   const logout = async () => {
     try {
       await axios.post(
@@ -72,7 +88,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, signup, googleLogin, logout }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );
