@@ -1,19 +1,70 @@
 import Newsletter from "../models/Newsletter.js";
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-  pool: true, 
-  maxConnections: 5,
-});
 
+let _transporter = null;
 
+function getTransporter() {
+  if (!_transporter) {
+    _transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+      pool: true,
+      maxConnections: 3,
+      maxMessages: 100,
+     
+      connectionTimeout: 10_000, // 10 s
+      greetingTimeout: 10_000,
+      socketTimeout: 15_000,
+    });
+  }
+  return _transporter;
+}
+
+(async () => {
+  try {
+    await getTransporter().verify();
+    console.log("✅ SMTP transporter verified — credentials OK");
+  } catch (err) {
+    console.error("❌ SMTP transporter verification failed:", err.message);
+    console.error(
+      "   Emails will NOT be sent until this is fixed. Check EMAIL_USER / EMAIL_PASSWORD in .env",
+    );
+  }
+})();
+
+// ── Helpers ─────────────────────────────────────────────────────────
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Retry wrapper with exponential back-off.
+ * @param {Function} fn  
+ * @param {number} retries 
+ */
+async function withRetry(fn, retries = 2) {
+  let lastErr;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      if (attempt < retries) {
+        const delay = 1000 * 2 ** attempt; // 1 s → 2 s
+        console.warn(
+          `⚠️  Mail send attempt ${attempt + 1} failed: ${err.message}. Retrying in ${delay}ms…`,
+        );
+        await new Promise((r) => setTimeout(r, delay));
+        _transporter = null;
+      }
+    }
+  }
+  throw lastErr;
+}
 
 const buildWelcomeHtml = () => `
 <!DOCTYPE html>
@@ -75,7 +126,6 @@ export const subscribeToNewsletter = async (req, res) => {
   try {
     const { email } = req.body;
 
-    
     if (!email) {
       return res
         .status(400)
@@ -88,26 +138,31 @@ export const subscribeToNewsletter = async (req, res) => {
         .json({ success: false, message: "Invalid email format" });
     }
 
-    
     await Newsletter.create({ email: email.toLowerCase().trim() });
 
-    
+
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `"Flaire" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Welcome to Flaire ✨",
       html: buildWelcomeHtml(),
     };
 
-    transporter.sendMail(mailOptions).catch((err) => {
-      console.error("Failed to send welcome email:", err.message);
-    });
+    withRetry(() => getTransporter().sendMail(mailOptions))
+      .then(() => console.log(`📧 Welcome email sent to ${email}`))
+      .catch((err) => {
+        console.error(
+          `❌ Failed to send welcome email to ${email} after retries:`,
+        );
+        console.error("   Error:", err.message);
+        console.error("   Code:", err.code);
+        console.error("   Response:", err.response);
+      });
 
     return res
       .status(201)
       .json({ success: true, message: "Subscribed successfully" });
   } catch (error) {
-    
     if (error.code === 11000) {
       return res
         .status(409)
