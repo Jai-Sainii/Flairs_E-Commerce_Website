@@ -49,12 +49,40 @@ export const AuthProvider = ({ children }) => {
         { name, email, password },
         { withCredentials: true },
       );
-      setUser(res.data.user);
-      setLoading(false);
-      return true;
+      return res.data;
     } catch (err) {
       console.error("Signup failed:", err.response?.data || err);
-      return false;
+      return err.response?.data || { success: false };
+    }
+  };
+
+  const verifyOtp = async (email, otp) => {
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/api/auth/verify-otp`,
+        { email, otp },
+        { withCredentials: true },
+      );
+      setUser(res.data.user);
+      setLoading(false);
+      return res.data;
+    } catch (err) {
+      console.error("OTP verification failed:", err.response?.data || err);
+      return err.response?.data || { success: false };
+    }
+  };
+
+  const resendOtp = async (email) => {
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/api/auth/resend-otp`,
+        { email },
+        { withCredentials: true },
+      );
+      return res.data;
+    } catch (err) {
+      console.error("Resend OTP failed:", err.response?.data || err);
+      return err.response?.data || { success: false };
     }
   };
 
@@ -89,7 +117,16 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, login, signup, googleLogin, logout }}
+      value={{
+        user,
+        loading,
+        login,
+        signup,
+        googleLogin,
+        logout,
+        verifyOtp,
+        resendOtp,
+      }}
     >
       {!loading && children}
     </AuthContext.Provider>

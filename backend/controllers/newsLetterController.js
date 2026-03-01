@@ -1,7 +1,6 @@
 import Newsletter from "../models/Newsletter.js";
 import nodemailer from "nodemailer";
 
-
 let _transporter = null;
 
 function getTransporter() {
@@ -12,12 +11,12 @@ function getTransporter() {
       secure: true,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        pass: process.env.EMAIL_PASS,
       },
       pool: true,
       maxConnections: 3,
       maxMessages: 100,
-     
+
       connectionTimeout: 10_000, // 10 s
       greetingTimeout: 10_000,
       socketTimeout: 15_000,
@@ -43,8 +42,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
  * Retry wrapper with exponential back-off.
- * @param {Function} fn  
- * @param {number} retries 
+ * @param {Function} fn
+ * @param {number} retries
  */
 async function withRetry(fn, retries = 2) {
   let lastErr;
@@ -121,7 +120,6 @@ const buildWelcomeHtml = () => `
   </body>
 </html>`;
 
-
 export const subscribeToNewsletter = async (req, res) => {
   try {
     const { email } = req.body;
@@ -139,7 +137,6 @@ export const subscribeToNewsletter = async (req, res) => {
     }
 
     await Newsletter.create({ email: email.toLowerCase().trim() });
-
 
     const mailOptions = {
       from: `"Flaire" <${process.env.EMAIL_USER}>`,

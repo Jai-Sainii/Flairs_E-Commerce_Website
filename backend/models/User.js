@@ -6,6 +6,9 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: false },
     googleId: { type: String, default: null },
+    otp: { type: String, default: null },
+    otpExpiry: { type: Date, default: null },
+    isVerified: { type: Boolean, default: false },
     shippingAddress: {
       fullName: { type: String, default: "" },
       address: { type: String, default: "" },
