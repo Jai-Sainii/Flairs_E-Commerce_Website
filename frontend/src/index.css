@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -14,8 +14,10 @@
   body {
     @apply font-sans text-zinc-900 bg-white;
   }
-  
-  h1, h2, h4 {
+
+  h1,
+  h2,
+  h4 {
     @apply font-serif;
   }
 }
@@ -25,13 +27,12 @@
 }
 
 .glass-card {
-  @apply bg-white/10 backdrop-blur-md border border-white/20;
+  @apply bg-white/10 backdrop-blur-sm border border-white/20;
 }
 
-
-a.active hr{
-    display: block;
+a.active hr {
+  display: block;
 }
-a.active p{
-    color: rgb(240, 57, 176);
+a.active p {
+  color: rgb(240, 57, 176);
 }

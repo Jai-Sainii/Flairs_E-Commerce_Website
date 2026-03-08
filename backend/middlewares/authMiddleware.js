@@ -236,9 +236,10 @@ export const googleLogin = async (req, res) => {
       user = await User.findOne({ email });
       if (user) {
         user.googleId = googleId;
+        user.isVerified = true;
         await user.save();
       } else {
-        user = await User.create({ name, email, googleId });
+        user = await User.create({ name, email, googleId, isVerified: true, });
       }
     }
 

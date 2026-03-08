@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, memo } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
@@ -17,7 +17,7 @@ import { GoogleLogin } from "@react-oauth/google";
 const OTP_LENGTH = 4;
 const RESEND_COOLDOWN = 30;
 
-const OtpInput = ({ otp, setOtp, onComplete }) => {
+const OtpInput = memo(function OtpInput({ otp, setOtp, onComplete }) {
   const inputRefs = useRef([]);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const OtpInput = ({ otp, setOtp, onComplete }) => {
       ))}
     </div>
   );
-};
+});
 
 const Signup = () => {
   const { signup, login, googleLogin, verifyOtp, resendOtp } = useAuth();
@@ -163,16 +163,16 @@ const Signup = () => {
 
   const onSubmitLogin = async (data) => {
     try {
-      const success = await login(data.email, data.password);
-      if (success) {
+      const result = await login(data.email, data.password);
+      if (result?.success) {
         toast.success("Login successful!");
         navigate("/");
       } else {
-        toast.error("Invalid email or password");
+        toast.error(result?.message || "Login failed. Please try again.");
       }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Login failed. Please try again.");
+      toast.error(error?.message || "Login failed. Please try again.");
     }
   };
 
@@ -195,10 +195,10 @@ const Signup = () => {
     <AnimatePresence mode="wait">
       <motion.div
         key={otpStep ? "otp" : isLogin ? "login" : "signup"}
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -20, scale: 0.95 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
         className="w-full max-w-lg p-10 rounded-3xl glass-card shadow-2xl relative overflow-hidden"
       >
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-flaire-pink/20 blur-3xl rounded-full"></div>

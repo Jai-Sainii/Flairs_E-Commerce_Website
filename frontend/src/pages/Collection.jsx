@@ -327,9 +327,17 @@ const Collection = () => {
                 ))}
               </div>
             ) : filteredProducts.length === 0 ? (
-              <p className="text-gray-500 text-center py-10">
-                No products found.
-              </p>
+              <>
+                <p className="text-gray-500 text-center py-10">
+                  No products found.
+                </p>
+                <button
+                  onClick={() => fetchData()}
+                  className="text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none cursor-pointer bg-white w-full sm:w-auto"
+                >
+                  Refresh
+                </button>
+              </>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                 {filteredProducts.map((product, index) => (

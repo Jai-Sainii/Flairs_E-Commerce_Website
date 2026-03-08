@@ -1,1 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+
+  --color-flaire-pink: #ff4e91;
+  --color-flaire-orange: #ff8a5c;
+  --color-flaire-coral: #ff8a75;
+}
+
+@layer base {
+  body {
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    color: #18181b;
+    background: linear-gradient(to bottom right, #fff1f2, #ffffff, #fdf2f8);
+    min-height: 100vh;
+  }
+
+  h1,
+  h2 {
+    font-family: "Playfair Display", serif;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #fca5c4;
+  border-radius: 3px;
+}
+
+/* Loading spinner */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 1.2s linear infinite;
+}
+
+/* Active nav link */
+a.active {
+  color: #ff4e91;
+  font-weight: 600;
+}

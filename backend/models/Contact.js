@@ -34,10 +34,16 @@ const contactSchema = new mongoose.Schema(
       trim: true,
       maxlength: [1000, "Message cannot exceed 1000 characters"],
     },
+
+    status: {
+      type: String,
+      enum: ["New", "Read", "Responded"],
+      default: "New",
+    },
   },
   {
-    timestamps: true, 
-  }
+    timestamps: true,
+  },
 );
 
 const Contact = mongoose.model("Contact", contactSchema);
