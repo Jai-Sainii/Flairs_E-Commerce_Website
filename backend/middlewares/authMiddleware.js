@@ -30,16 +30,16 @@ const generateOtp = () => {
   return Math.floor(1000 + Math.random() * 9000).toString();
 };
 
-const sendOtpEmail = async (email, otp) => {
+const sendOtpEmail = async (subject, email, otp) => {
   const mailTransporter = getTransporter();
   await mailTransporter.sendMail({
     from: `"Flaire" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: "Verify Your Flaire Account",
+    subject: subject,
     html: `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px; background: #18181b; border-radius: 16px; color: #fff;">
         <h2 style="text-align: center; margin-bottom: 8px;">Welcome to Flaire ✨</h2>
-        <p style="text-align: center; color: #a1a1aa; font-size: 14px;">Use the code below to verify your email address</p>
+        <p style="text-align: center; color: #a1a1aa; font-size: 14px;">Use the code below to ${subject}</p>
         <div style="text-align: center; margin: 32px 0;">
           <span style="font-size: 36px; font-weight: bold; letter-spacing: 12px; background: linear-gradient(135deg, #ec4899, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 16px 24px;">${otp}</span>
         </div>
@@ -68,7 +68,7 @@ export const signup = async (req, res) => {
         existingUser.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
         await existingUser.save();
 
-        await sendOtpEmail(email, otp);
+        await sendOtpEmail("Verify Your Flaire Account", email, otp);
 
         return res.status(200).json({
           success: true,
@@ -95,7 +95,7 @@ export const signup = async (req, res) => {
       isVerified: false,
     });
 
-    await sendOtpEmail(email, otp);
+    await sendOtpEmail("Verify Your Flaire Account", email, otp);
 
     res.status(201).json({
       success: true,
@@ -239,7 +239,7 @@ export const googleLogin = async (req, res) => {
         user.isVerified = true;
         await user.save();
       } else {
-        user = await User.create({ name, email, googleId, isVerified: true, });
+        user = await User.create({ name, email, googleId, isVerified: true });
       }
     }
 
@@ -347,7 +347,7 @@ export const resendOtp = async (req, res) => {
     user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
 
-    await sendOtpEmail(email, otp);
+    await sendOtpEmail("Verify Your Flaire Account", email, otp);
 
     res.status(200).json({
       success: true,
@@ -355,6 +355,123 @@ export const resendOtp = async (req, res) => {
     });
   } catch (error) {
     console.error("Resend OTP Error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const otp = generateOtp();
+    user.otp = otp;
+    user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+
+    await sendOtpEmail("Forgot Password", email, otp);
+
+    res.status(200).json({
+      success: true,
+      message: "OTP sent to your email",
+    });
+  } catch (error) {
+    console.error("Forgot Password Error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const VerifyForgotPasswordOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email and OTP are required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(401).json({ success: false, message: "Invalid OTP" });
+    }
+
+    if (user.otpExpiry < Date.now()) {
+      return res
+        .status(401)
+        .json({ success: false, message: "OTP has expired. Please resend." });
+    }
+
+    user.isForgotPassword = true;
+    user.otp = null;
+    user.otpExpiry = null;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "OTP verified successfully",
+      user: { id: user._id, name: user.name, email: user.email },
+    });
+  } catch (error) {
+    console.error("Verify OTP Error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (!user.isForgotPassword) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Please verify your email first" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    user.isForgotPassword = false;
+    user.otp = null;
+    user.otpExpiry = null;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successful",
+    });
+  } catch (error) {
+    console.error("Reset Password Error:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

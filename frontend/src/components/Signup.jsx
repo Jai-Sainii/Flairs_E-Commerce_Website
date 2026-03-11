@@ -178,8 +178,8 @@ const Signup = () => {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const success = await googleLogin(credentialResponse.credential);
-      if (success) {
+      const result = await googleLogin(credentialResponse.credential);
+      if (result?.success) {
         toast.success("Google login successful!");
         navigate("/");
       } else {
@@ -469,6 +469,7 @@ const Signup = () => {
                 <div className="flex justify-end">
                   <button
                     type="button"
+                    onClick={() => navigate("/forgot-password")}
                     className="text-xs text-flaire-pink hover:text-flaire-orange transition-colors"
                   >
                     Forgot Password?

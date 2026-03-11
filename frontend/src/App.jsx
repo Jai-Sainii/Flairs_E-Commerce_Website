@@ -18,6 +18,7 @@ import OrderDetailsPage from "./pages/OrderDetailsPage";
 import OrdersPage from "./pages/OrdersPage";
 import LoadingScreen from "./pages/LoadingScreen";
 import NotFound from "./pages/NotFound";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   const location = useLocation();
@@ -39,6 +40,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/cart"
               element={

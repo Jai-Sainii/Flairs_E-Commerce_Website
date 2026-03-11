@@ -32,16 +32,16 @@ export default function ProductCard({ product }) {
       </div>
 
       <div className="p-2 sm:p-4">
-        <h3 className="text-sm sm:text-lg font-semibold text-gray-800">
+        <h3 className="text-sm sm:text-lg font-semibold text-gray-800 line-clamp-1">
           {productName}
         </h3>
         <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">
           {productCategory}
         </p>
 
-        <p className="text-gray-700 text-xs sm:text-sm mb-1 sm:mb-2 line-clamp-2 hidden sm:block">
+        {/* <p className="text-gray-700 text-xs sm:text-sm mb-1 sm:mb-2 line-clamp-2 hidden sm:block">
           {productDescription}
-        </p>
+        </p> */}
 
         <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-3">
           {productSize.map((size, index) => (

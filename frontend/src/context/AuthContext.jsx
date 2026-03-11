@@ -35,10 +35,10 @@ export const AuthProvider = ({ children }) => {
       );
       setUser(res.data.user);
       setLoading(false);
-      return true;
+      return res.data;
     } catch (err) {
       console.error("Login failed:", err.response?.data || err);
-      return err.response?.data || { success: false };
+      return err.response?.data || { success: false, message: "Login failed" };
     }
   };
 
@@ -95,10 +95,55 @@ export const AuthProvider = ({ children }) => {
       );
       setUser(res.data.user);
       setLoading(false);
-      return true;
+      return { success: true };
     } catch (err) {
       console.error("Google login failed:", err.response?.data || err);
-      return false;
+      return { success: false };
+    }
+  };
+
+  const forgotPassword = async (email) => {
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/api/auth/forgot-password`,
+        { email },
+        { withCredentials: true },
+      );
+      return res.data;
+    } catch (err) {
+      console.error("Forgot password failed:", err.response?.data || err);
+      return err.response?.data || { success: false };
+    }
+  };
+
+  const verifyForgotPasswordOtp = async (email, otp) => {
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/api/auth/verify-forgot-password-otp`,
+        { email, otp },
+        { withCredentials: true },
+      );
+      return res.data;
+    } catch (err) {
+      console.error(
+        "Verify forgot password OTP failed:",
+        err.response?.data || err,
+      );
+      return err.response?.data || { success: false };
+    }
+  };
+
+  const resetPassword = async (email, password) => {
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/api/auth/reset-password`,
+        { email, password },
+        { withCredentials: true },
+      );
+      return res.data;
+    } catch (err) {
+      console.error("Reset password failed:", err.response?.data || err);
+      return err.response?.data || { success: false };
     }
   };
 
@@ -126,6 +171,9 @@ export const AuthProvider = ({ children }) => {
         logout,
         verifyOtp,
         resendOtp,
+        forgotPassword,
+        verifyForgotPasswordOtp,
+        resetPassword,
       }}
     >
       {!loading && children}
