@@ -85,13 +85,13 @@ function App() {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={3000}
+        autoClose={3500}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop
         closeOnClick
         pauseOnHover
         draggable
-        theme="colored"
+        theme="light"
       />
     </>
   );

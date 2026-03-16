@@ -119,9 +119,9 @@ const Profile = () => {
           <div className="pt-14 px-8 pb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
               <div>
-                <motion.h1 className="text-2xl font-bold text-gray-800">
+                <h1 className="text-2xl font-bold text-gray-800">
                   {user.name || "Guest"}
-                </motion.h1>
+                </h1>
                 <div className="flex items-center gap-2 mt-1 text-gray-500 text-sm">
                   <Mail size={14} className="text-pink-400" />
                   {user.email || "user@example.com"}
